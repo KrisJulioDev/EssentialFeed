@@ -80,13 +80,13 @@ final class RemoteFeedLoaderTests: XCTestCase {
         return (sut, client)
     }
     
-               private func expects(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
-            
-            var capturedResults = [RemoteFeedLoader.Result]()
-            sut.load { capturedResults.append($0) }
-            
-            action()
-        }
+    private func expects(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        
+        var capturedResults = [RemoteFeedLoader.Result]()
+        sut.load { capturedResults.append($0) }
+        
+        action()
+    }
     
     private class HTTPClientSpy: HTTPClient {
         
