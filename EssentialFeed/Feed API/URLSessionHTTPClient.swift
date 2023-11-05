@@ -1,12 +1,11 @@
 //
 //  URLSessionHTTPClient.swift
-//  EssentialFeedTests
+//  EssentialFeed
 //
 //  Created by Khristoffer Julio on 11/5/23.
 //
- 
+
 import Foundation
-import EssentialFeed 
 
 public class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
