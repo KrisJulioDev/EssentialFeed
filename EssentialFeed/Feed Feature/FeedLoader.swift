@@ -12,8 +12,6 @@ public enum LoadFeedResult {
     case failure(Error)
 }
 
-public protocol FeedLoader {
-    associatedtype Error: Swift.Error
-
+public protocol FeedLoader { 
     func load(completion: @escaping (LoadFeedResult) -> Void)
 }
