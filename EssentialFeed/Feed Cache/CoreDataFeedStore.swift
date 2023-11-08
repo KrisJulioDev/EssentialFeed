@@ -18,13 +18,9 @@ public final class CoreDataFeedStore: FeedStore {
     }
     
     public func retrieve(completion: @escaping RetrievalCompletion) {
-        let context = self.context
-        context.perform {
+         perform { context in
             do {
-                let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
-                request.returnsObjectsAsFaults = false
-                
-                if let cache = try context.fetch(request).first {
+                if let cache = try ManagedCache.find(in: context) {
                     completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
                 } else {
                     completion(.empty)
@@ -34,14 +30,13 @@ public final class CoreDataFeedStore: FeedStore {
             }
         }
     }
-
+    
     public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-        let context = self.context
-        context.perform {
+        perform { context in
             do {
-                let managedCache = ManagedCache(context: context)
-                managedCache.feed = ManagedFeedImage.images(from: feed, in: context)
+                let managedCache = try ManagedCache.newUniqueInstance(in: context)
                 managedCache.timestamp = timestamp
+                managedCache.feed = ManagedFeedImage.images(from: feed, in: context)
                 
                 try context.save()
                 completion(nil)
@@ -49,11 +44,22 @@ public final class CoreDataFeedStore: FeedStore {
                 completion(error)
             }
         }
-        
     }
-
+    
     public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-
+        perform { context in
+            do {
+                try ManagedCache.find(in: context).map(context.delete).map(context.save)
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
+    }
+    
+    private func perform(_ action: @escaping (NSManagedObjectContext) -> Void) {
+        let context = self.context
+        context.perform { action(context) }
     }
 }
 
@@ -65,15 +71,17 @@ private extension NSPersistentContainer {
     
     static func load(modelName name: String, url: URL, in bundle: Bundle) throws -> NSPersistentContainer {
         
+        
         guard let model = NSManagedObjectModel.with(name: name, bundle: bundle) else {
             throw LoadingError.modelNotFound
         }
 
         let description = NSPersistentStoreDescription(url: url)
         let container = NSPersistentContainer(name: name, managedObjectModel: model)
+        container.persistentStoreDescriptions = [description]
+        
         var loadError: Swift.Error?
         container.loadPersistentStores { loadError = $1 }
-        container.persistentStoreDescriptions = [description]
         
         try loadError.map { throw LoadingError.FailedToLoadPersistentStores($0) }
         
@@ -93,6 +101,17 @@ class ManagedCache: NSManagedObject {
     @NSManaged var timestamp: Date
     @NSManaged var feed: NSOrderedSet
     
+    static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
+        let request = NSFetchRequest<ManagedCache>(entityName: entity().name!)
+        request.returnsObjectsAsFaults = false
+        return try context.fetch(request).first
+    }
+    
+    static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
+        try find(in: context).map(context.delete)
+        return ManagedCache(context: context)
+    }
+ 
     var localFeed: [LocalFeedImage] {
         return feed.compactMap { ($0 as? ManagedFeedImage)?.local }
     }
