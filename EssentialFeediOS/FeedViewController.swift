@@ -8,46 +8,32 @@
 import UIKit
 import EssentialFeed
 
-public protocol FeedImageDataLoaderTask {
-	func cancel()
-}
-
-public protocol FeedImageDataLoader {
-	typealias Result = Swift.Result<Data, Error>
-
-	func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask
-}
-
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
-	private var feedLoader: FeedLoader?
+	private var refreshController: RefreshViewController?
 	private var imageLoader: FeedImageDataLoader?
-	private var tableModel = [FeedImage]()
-	private var tasks = [IndexPath: FeedImageDataLoaderTask]()
+    private var tableModel = [FeedImage]() {
+        didSet { tableView.reloadData() }
+    }
+
+    private var tasks = [IndexPath: FeedImageDataLoaderTask]()
+    private var cellControllers = [IndexPath: FeedImageCellController]()
 
 	public convenience init(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) {
 		self.init()
-		self.feedLoader = feedLoader
+		self.refreshController = RefreshViewController(feedLoader: feedLoader)
 		self.imageLoader = imageLoader
 	}
 	
 	public override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		refreshControl = UIRefreshControl()
-		refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        refreshControl = refreshController?.view
+        refreshController?.onRefresh = { [weak self] feed in
+            self?.tableModel = feed
+        }
+        
 		tableView.prefetchDataSource = self
-		load()
-	}
-	
-	@objc private func load() {
-		refreshControl?.beginRefreshing()
-		feedLoader?.load { [weak self] result in
-			if let feed = try? result.get() {
-				self?.tableModel = feed
-				self?.tableView.reloadData()
-			}
-			self?.refreshControl?.endRefreshing()
-		}
+        refreshController?.refresh()
 	}
 	
 	public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,50 +41,31 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
 	}
 	
 	public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cellModel = tableModel[indexPath.row]
-		let cell = FeedImageCell()
-		cell.locationContainer.isHidden = (cellModel.location == nil)
-		cell.locationLabel.text = cellModel.location
-		cell.descriptionLabel.text = cellModel.description
-		cell.feedImageView.image = nil
-		cell.feedImageRetryButton.isHidden = true
-		cell.feedImageContainer.startShimmering()
-		
-		let loadImage = { [weak self, weak cell] in
-			guard let self = self else { return }
-
-			self.tasks[indexPath] = self.imageLoader?.loadImageData(from: cellModel.url) { [weak cell] result in
-				let data = try? result.get()
-				let image = data.map(UIImage.init) ?? nil
-				cell?.feedImageView.image = image
-				cell?.feedImageRetryButton.isHidden = (image != nil)
-				cell?.feedImageContainer.stopShimmering()
-			}
-		}
-		
-		cell.onRetry = loadImage
-		loadImage()
-		
-		return cell
+        return cellController(for: indexPath).view()
 	}
 	
 	public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		cancelTask(forRowAt: indexPath)
+        cellControllers[indexPath] = nil
 	}
 	
 	public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
 		indexPaths.forEach { indexPath in
-			let cellModel = tableModel[indexPath.row]
-			tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) { _ in }
+            cellController(for: indexPath).prefetch()
 		}
 	}
 	
 	public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-		indexPaths.forEach(cancelTask)
+        indexPaths.forEach { cellControllers[$0] = nil }
 	}
+    
+    func cellController(for indexPath: IndexPath) -> FeedImageCellController {
+        let cellModel = tableModel[indexPath.row]
+        let cellController = FeedImageCellController(model: cellModel, imageLoader: imageLoader)
+        cellControllers[indexPath] = cellController
+        return cellController
+    }
 	
 	private func cancelTask(forRowAt indexPath: IndexPath) {
-		tasks[indexPath]?.cancel()
-		tasks[indexPath] = nil
+		cellControllers[indexPath] = nil
 	}
 }
