@@ -21,7 +21,7 @@ final class RefreshViewController: NSObject {
         self.feedLoader = feedLoader
     }
     
-    var onRefresh: (([FeedImage]) -> Void)?
+    var onRefresh: (([FeedImage]) -> Void)? 
     
     @objc func refresh() {
         view.beginRefreshing()
