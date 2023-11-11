@@ -33,7 +33,7 @@ final class FeedImageViewModel<Image> {
     var hasLocation: Bool {
         location != nil
     }
-
+ 
     var onImageLoad: Observer<Image>?
     var onImageLoadingStateChange: Observer<Bool>?
     var onShouldRetryImageLoadStateChange: Observer<Bool>?
