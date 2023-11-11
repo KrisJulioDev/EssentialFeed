@@ -43,7 +43,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
 	
 	public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
 		indexPaths.forEach { indexPath in
-            cellController(for: indexPath).prefetch()
+            cellController(for: indexPath).preload()
 		}
 	}
 	
@@ -55,7 +55,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         return tableModel[indexPath.row]
     }
 	
-	private func cancelControllerLoad(forRowAt indexPath: IndexPath) {
-        tableModel[indexPath.row].cancelTask()
-	}
+    private func cancelControllerLoad(forRowAt indexPath: IndexPath) {
+        tableModel[indexPath.row].cancelLoad()
+    }
 }

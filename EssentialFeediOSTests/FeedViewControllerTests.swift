@@ -305,7 +305,6 @@ final class FeedViewControllerTests: XCTestCase {
             imageRequests[index].completion(.failure(error))
         }
     }
-
 }
 
 private extension FeedViewController {
