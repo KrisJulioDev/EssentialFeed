@@ -14,11 +14,15 @@ public final class FeedUIComposer {
     public static func feedComposeWith(_ feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
         let presentationAdapter = FeedLoaderPresentationAdapter(feedLoader: feedLoader)
         let refreshController = RefreshViewController(delegate: presentationAdapter)
-        let feedController = FeedViewController(refreshController: refreshController)
+         
+        let bundle = Bundle(for: FeedViewController.self)
+        let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
+        let feedController = storyboard.instantiateInitialViewController() as! FeedViewController
+        feedController.refreshController = refreshController
         
         presentationAdapter.presenter = FeedPresenter(feedView: FeedAdapter(controller: feedController,
                                                                             loader: imageLoader),
-                                                      loadingView: WeakVirtualProxy(refreshController))
+                                                      loadingView: WeakRefVirtualProxy(refreshController))
         
         return feedController
     }
@@ -35,7 +39,7 @@ public final class FeedUIComposer {
     }
 }
 
-private class WeakVirtualProxy<T: AnyObject> {
+private class WeakRefVirtualProxy<T: AnyObject> {
     private weak var object: T?
     
     init(_ object: T?) {
@@ -43,7 +47,7 @@ private class WeakVirtualProxy<T: AnyObject> {
     }
 }
 
-extension WeakVirtualProxy: FeedLoadingView where T: FeedLoadingView {
+extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
     func display(_ viewModel: FeedLoadingViewModel) {
         object?.display(viewModel)
     }
