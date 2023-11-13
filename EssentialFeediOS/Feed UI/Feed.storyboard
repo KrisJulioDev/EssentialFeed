@@ -77,6 +77,9 @@ Location</string>
                                                             <state key="normal" title="↻">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="4Aa-lg-gTp" eventType="touchUpInside" id="OS9-9N-hwV"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.8901960784313725" green="0.8901960784313725" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
@@ -118,6 +121,14 @@ Location</string>
                                         <constraint firstItem="AIZ-ON-RY8" firstAttribute="top" secondItem="ZOf-kB-Mm6" secondAttribute="topMargin" priority="999" constant="6" id="zeV-IS-QiH"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="H63-o4-rxp" id="8cY-xg-IDh"/>
+                                    <outlet property="feedImageContainer" destination="FAU-iA-TTE" id="eRN-Dm-OKX"/>
+                                    <outlet property="feedImageRetryButton" destination="ojQ-jM-69D" id="FM6-55-ylV"/>
+                                    <outlet property="feedImageView" destination="tsT-7G-iNQ" id="Sbf-Rw-2o6"/>
+                                    <outlet property="locationContainer" destination="iiY-WY-aBZ" id="Ztx-70-sFn"/>
+                                    <outlet property="locationLabel" destination="gSb-GM-nc6" id="Jnd-4b-W4j"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -130,7 +141,7 @@ Location</string>
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
-                            <action selector="refresh" destination="1hh-nG-9OR" eventType="valueChanged" id="btf-Gy-nWp"/>
+                            <action selector="refresh" destination="1hh-nG-9OR" eventType="valueChanged" id="gQe-d6-eaP"/>
                         </connections>
                     </refreshControl>
                 </tableViewController>
