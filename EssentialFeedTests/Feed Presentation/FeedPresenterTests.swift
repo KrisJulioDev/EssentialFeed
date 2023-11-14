@@ -7,56 +7,6 @@
 
 import XCTest
 import EssentialFeed
- 
-protocol FeedView {
-    func display(_ viewModel: FeedViewModel)
-}
- 
-struct FeedViewModel {
-    let feed: [FeedImage]
-}
-
-struct FeedLoadingViewModel {
-    let isLoading: Bool
-}
-
-protocol FeedLoadingView {
-    func display(_ viewModel: FeedLoadingViewModel)
-}
-
-struct FeedErrorViewModel {
-    var message: String?
-    
-    static var noError: FeedErrorViewModel {
-        FeedErrorViewModel(message: nil)
-    }
-}
-
-protocol FeedErrorView {
-    func display(_ viewModel: FeedErrorViewModel)
-}
-
-final class FeedPresenter {
-    private let feedView: FeedView
-    private let loadingView: FeedLoadingView
-    private let errorView: FeedErrorView
-    
-    init(feedView: FeedView, loadingView: FeedLoadingView, errorView: FeedErrorView) {
-        self.feedView = feedView
-        self.loadingView = loadingView
-        self.errorView = errorView
-    }
-    
-    func didStartLoadingFeed() {
-        errorView.display(.noError)
-        loadingView.display(.init(isLoading: true))
-    }
-    
-    func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(.init(feed: feed))
-        loadingView.display(.init(isLoading: false))
-    } 
-}
 
 final class FeedPresenterTests: XCTestCase {
     func test_init_doesNotSendErrorToView() {
@@ -94,6 +44,13 @@ final class FeedPresenterTests: XCTestCase {
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
+    }
+    
+    func localized(_ key: String) -> String {
+        let bundle = Bundle(for: FeedPresenter.self)
+        let key = key
+        let localized = bundle.localizedString(forKey: key, value: "", table: "Feed")
+        return localized
     }
     
     private final class ViewSpy: FeedView, FeedErrorView, FeedLoadingView {
