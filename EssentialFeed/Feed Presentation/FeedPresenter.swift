@@ -13,15 +13,7 @@ public protocol FeedView {
 
 public protocol FeedLoadingView {
     func display(_ viewModel: FeedLoadingViewModel)
-}
-
-public struct FeedErrorViewModel {
-    public var message: String?
-    
-    public static var noError: FeedErrorViewModel {
-        FeedErrorViewModel(message: nil)
-    }
-}
+} 
 
 public protocol FeedErrorView {
     func display(_ viewModel: FeedErrorViewModel)
@@ -31,6 +23,13 @@ public final class FeedPresenter {
     private let feedView: FeedView
     private let loadingView: FeedLoadingView
     private let errorView: FeedErrorView
+    
+    public static var title: String {
+        return NSLocalizedString("FEED_VIEW_TITLE",
+            tableName: "Feed",
+            bundle: Bundle(for: FeedPresenter.self),
+            comment: "Title for the feed view")
+    }
     
     public init(feedView: FeedView, loadingView: FeedLoadingView, errorView: FeedErrorView) {
         self.feedView = feedView
