@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import EssentialFeediOS
+import EssentialFeed
 
 extension FeedUIIntegrationTests {
     func localized(_ key: String) -> String {
-        let bundle = Bundle(for: FeedViewController.self)
+        let bundle = Bundle(for: FeedPresenter.self)
         let key = key
         let localized = bundle.localizedString(forKey: key, value: "Feed Title", table: "Feed")
         return localized
