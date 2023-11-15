@@ -7,27 +7,46 @@
 
 import Foundation
 
-protocol FeedImageDataLoaderTask {
+public protocol FeedImageDataLoaderTask {
     func cancel()
 }
 
-protocol FeedImageDataLoader {
+public protocol FeedImageDataLoader {
     typealias Result = Swift.Result<Data, Error>
     
     func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask
 }
 
-class RemoteFeedImageDataLoader: FeedImageDataLoader {
+public class RemoteFeedImageDataLoader: FeedImageDataLoader {
+    private let client: HTTPClient
     
-    let client: HTTPClient
-    
-    init(client: HTTPClient) {
+    public init(client: HTTPClient) {
         self.client = client
     }
     
     enum Error: Swift.Error {
         case connectivity
         case invalidData
+    }
+    
+    public typealias Result = FeedImageDataLoader.Result
+    
+    public func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask {
+
+        let task = HTTPClientTaskWrapper(completion)
+        
+        task.wrapped = client.get(from: url) { [weak self] result in
+            guard self != nil else { return }
+            task.complete(with: result
+                .mapError { _ in Error.connectivity }
+                .flatMap { data, response in
+                    let isValidResponse = response.isOK && !data.isEmpty
+                    return isValidResponse ? .success(data) : .failure(Error.invalidData)
+                }
+            )
+        }
+        
+        return task
     }
     
     private class HTTPClientTaskWrapper: FeedImageDataLoaderTask {
@@ -51,24 +70,6 @@ class RemoteFeedImageDataLoader: FeedImageDataLoader {
         private func preventFurtherCompletions() {
             completion = nil
         }
-    }
-    
-    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        
-        let task = HTTPClientTaskWrapper(completion)
-        
-        task.wrapped = client.get(from: url) { [weak self] result in
-            guard self != nil else { return }
-            task.complete(with: result
-                .mapError { _ in Error.connectivity }
-                .flatMap { data, response in
-                    let isValidResponse = response.isOK && !data.isEmpty
-                    return isValidResponse ? .success(data) : .failure(Error.invalidData)
-                }
-            )
-        }
-        
-        return task
     }
     
 }
