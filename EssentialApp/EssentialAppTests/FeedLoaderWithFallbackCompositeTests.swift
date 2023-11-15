@@ -28,7 +28,7 @@ final class FeedLoaderWithFallbackCompositeTests: XCTestCase {
         let sut = makeSUT(primaryResult: .failure(anyNSError()), fallbackResult: .failure(anyNSError()))
         
         expect(sut, toCompleteWith: .failure(anyNSError()))
-    }
+    } 
     
     // MARK: - Helpers
     
