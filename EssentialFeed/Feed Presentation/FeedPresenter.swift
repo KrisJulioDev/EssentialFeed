@@ -9,15 +9,7 @@ import Foundation
 
 public protocol FeedView {
     func display(_ viewModel: FeedViewModel)
-}
- 
-public struct FeedViewModel {
-    public let feed: [FeedImage]
-}
-
-public struct FeedLoadingViewModel {
-    public let isLoading: Bool
-}
+} 
 
 public protocol FeedLoadingView {
     func display(_ viewModel: FeedLoadingViewModel)

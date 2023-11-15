@@ -5,8 +5,6 @@
 //  Created by Khristoffer Julio on 11/11/23.
 //
 
-import EssentialFeed
-
 protocol FeedLoadingView {
     func display(_ viewModel: FeedLoadingViewModel)
 }
