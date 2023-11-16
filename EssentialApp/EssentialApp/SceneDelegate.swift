@@ -21,6 +21,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let feedLoader = RemoteFeedLoader(url: url, client: client)
         let imageLoader = RemoteFeedImageDataLoader(client: client)
         
+////        let localStoreURL = NSPersistentContainer
+////            .defaultDirectoryURL()
+////            .append(path: "feed-store.sqlite")
+//        
+//        let localStore = CoreDataFeedStore(storeURL: localStoreURL)
+//        let localFeedLoader = LocalFeedLoader(store: localStore, currentDate: Date.init)
+////        let localImageLoader = 
+        
         let feedViewController = FeedUIComposer.feedComposeWith(
             feedLoader: feedLoader,
             imageLoader: imageLoader

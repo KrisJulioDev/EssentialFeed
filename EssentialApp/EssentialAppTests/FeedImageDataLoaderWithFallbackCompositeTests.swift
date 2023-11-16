@@ -9,7 +9,7 @@ import XCTest
 import EssentialApp
 import EssentialFeed
 
-final class FeedImageDataLoaderWithFallbackComposite: XCTestCase {
+final class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     
     func test_load_deliversPrimaryImageDataForPrimaryLoadSuccess() {
         let primaryData = anyData()
@@ -75,7 +75,7 @@ final class FeedImageDataLoaderWithFallbackComposite: XCTestCase {
         
         let primaryLoader = FeedImageDataLoaderStub(result: primaryResult)
         let fallbackLoader = FeedImageDataLoaderStub(result: fallbackResult)
-        let sut = RemoteImageDataLoaderWithFallbackComposite(primaryLoader: primaryLoader,
+        let sut = FeedImageDataLoaderWithFallbackComposite(primaryLoader: primaryLoader,
                                                              fallbackLoader: fallbackLoader)
         
         trackForMemoryLeaks(sut, file: file, line: line)

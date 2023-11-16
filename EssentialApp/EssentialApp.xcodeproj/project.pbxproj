@@ -10,9 +10,9 @@
 		359A5EF72B04D2C80052ED0C /* FeedLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5EF62B04D2C80052ED0C /* FeedLoaderWithFallbackCompositeTests.swift */; };
 		359A5EF92B04E72E0052ED0C /* XCTest+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5EF82B04E72E0052ED0C /* XCTest+Helpers.swift */; };
 		359A5EFC2B04EA040052ED0C /* RemoteLoaderWithLocalFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5EFB2B04EA040052ED0C /* RemoteLoaderWithLocalFallbackComposite.swift */; };
-		359A5EFE2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5EFD2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift */; };
+		359A5EFE2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5EFD2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
 		359A5F012B04EDED0052ED0C /* SharedItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5F002B04EDED0052ED0C /* SharedItemsHelper.swift */; };
-		359A5F032B04F6190052ED0C /* RemoteImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5F022B04F6190052ED0C /* RemoteImageDataLoaderWithFallbackComposite.swift */; };
+		359A5F032B04F6190052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359A5F022B04F6190052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift */; };
 		35B3F19B2B04897D00EE2BC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B3F19A2B04897D00EE2BC0 /* AppDelegate.swift */; };
 		35B3F19D2B04897D00EE2BC0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B3F19C2B04897D00EE2BC0 /* SceneDelegate.swift */; };
 		35B3F19F2B04897D00EE2BC0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B3F19E2B04897D00EE2BC0 /* ViewController.swift */; };
@@ -54,9 +54,9 @@
 		359A5EF62B04D2C80052ED0C /* FeedLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		359A5EF82B04E72E0052ED0C /* XCTest+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Helpers.swift"; sourceTree = "<group>"; };
 		359A5EFB2B04EA040052ED0C /* RemoteLoaderWithLocalFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteLoaderWithLocalFallbackComposite.swift; sourceTree = "<group>"; };
-		359A5EFD2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		359A5EFD2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		359A5F002B04EDED0052ED0C /* SharedItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedItemsHelper.swift; sourceTree = "<group>"; };
-		359A5F022B04F6190052ED0C /* RemoteImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		359A5F022B04F6190052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		35B3F1972B04897D00EE2BC0 /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35B3F19A2B04897D00EE2BC0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		35B3F19C2B04897D00EE2BC0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				359A5EFB2B04EA040052ED0C /* RemoteLoaderWithLocalFallbackComposite.swift */,
-				359A5F022B04F6190052ED0C /* RemoteImageDataLoaderWithFallbackComposite.swift */,
+				359A5F022B04F6190052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift */,
 			);
 			path = Composition;
 			sourceTree = "<group>";
@@ -138,7 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				359A5EF62B04D2C80052ED0C /* FeedLoaderWithFallbackCompositeTests.swift */,
-				359A5EFD2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift */,
+				359A5EFD2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackCompositeTests.swift */,
 				359A5EF82B04E72E0052ED0C /* XCTest+Helpers.swift */,
 				359A5F002B04EDED0052ED0C /* SharedItemsHelper.swift */,
 			);
@@ -264,7 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				359A5EFC2B04EA040052ED0C /* RemoteLoaderWithLocalFallbackComposite.swift in Sources */,
-				359A5F032B04F6190052ED0C /* RemoteImageDataLoaderWithFallbackComposite.swift in Sources */,
+				359A5F032B04F6190052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 				35B3F19F2B04897D00EE2BC0 /* ViewController.swift in Sources */,
 				35B3F19B2B04897D00EE2BC0 /* AppDelegate.swift in Sources */,
 				35B3F19D2B04897D00EE2BC0 /* SceneDelegate.swift in Sources */,
@@ -276,7 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				359A5EF92B04E72E0052ED0C /* XCTest+Helpers.swift in Sources */,
-				359A5EFE2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
+				359A5EFE2B04EAA50052ED0C /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
 				359A5EF72B04D2C80052ED0C /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
 				359A5F012B04EDED0052ED0C /* SharedItemsHelper.swift in Sources */,
 			);

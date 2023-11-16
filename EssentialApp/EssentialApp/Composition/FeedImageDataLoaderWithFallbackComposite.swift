@@ -7,7 +7,7 @@
 
 import EssentialFeed
  
-public final class RemoteImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
+public final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     let primaryLoader: FeedImageDataLoader
     let fallbackLoader: FeedImageDataLoader
     
