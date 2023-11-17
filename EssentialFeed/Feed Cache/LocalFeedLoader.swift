@@ -4,7 +4,7 @@
 //
 //  Created by Khristoffer Julio on 11/6/23.
 // 
-import Foundation
+import Foundation 
 
 public final class LocalFeedLoader {
     private let store: FeedStore
@@ -16,16 +16,17 @@ public final class LocalFeedLoader {
     }
 }
 
-extension LocalFeedLoader {
-    public typealias SaveResult = Result<Void, Error>
-    
+extension LocalFeedLoader: FeedCache {
+    public typealias SaveResult = FeedCache.Result
+
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedFeed { [weak self] deletionError in
+        store.deleteCachedFeed { [weak self] deletionResult in
             guard let self = self else { return }
             
-            switch deletionError {
+            switch deletionResult {
             case .success:
                 self.cache(feed, with: completion)
+            
             case let .failure(error):
                 completion(.failure(error))
             }
@@ -33,10 +34,10 @@ extension LocalFeedLoader {
     }
     
     private func cache(_ feed: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
-        store.insert(feed.toLocal(), timestamp: currentDate()) { [weak self] error in
+        store.insert(feed.toLocal(), timestamp: currentDate()) { [weak self] insertionResult in
             guard self != nil else { return }
             
-            completion(error)
+            completion(insertionResult)
         }
     }
 }

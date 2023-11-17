@@ -14,6 +14,29 @@
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>
+		<key>EssentialAppUIAcceptanceTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>357B85AB2B06D35200B79966</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>35B3F1962B04897D00EE2BC0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>35B3F1AC2B04897E00EE2BC0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>
