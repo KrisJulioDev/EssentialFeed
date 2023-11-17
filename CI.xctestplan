@@ -28,8 +28,7 @@
         }
       ]
     },
-    "testExecutionOrdering" : "random",
-    "threadSanitizerEnabled" : true
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {
@@ -58,13 +57,6 @@
         "containerPath" : "container:..\/EssentialFeed.xcodeproj",
         "identifier" : "35A182E62AF626A8007073A1",
         "name" : "EssentialFeedTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/EssentialFeed.xcodeproj",
-        "identifier" : "356906CB2AFC76C200145049",
-        "name" : "EssentialFeediOSTests"
       }
     }
   ],

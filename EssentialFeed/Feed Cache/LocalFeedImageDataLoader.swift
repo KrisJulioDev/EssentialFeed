@@ -14,12 +14,20 @@ public final class LocalFeedImageDataLoader {
         self.store = store
     }
 }
+ 
+extension LocalFeedImageDataLoader: FeedImageDataCache {
+    public typealias SaveResult = FeedImageDataCache.Result
 
-extension LocalFeedImageDataLoader {
-    public typealias SaveResult = Swift.Result<Void, Error>
+    public enum SaveError: Error {
+        case failed
+    }
 
-    public func save(_ data: Data, url: URL, completion: @escaping (SaveResult) -> Void) {
-        store.insert(data, url: url, completion: completion)
+    public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+        store.insert(data, url: url) { [weak self] result in
+            guard self != nil else { return }
+            
+            completion(result.mapError { _ in SaveError.failed })
+        }
     }
 }
 

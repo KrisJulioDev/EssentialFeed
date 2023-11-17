@@ -8,17 +8,17 @@
 import UIKit
 import EssentialFeed
 
-protocol FeedViewControllerDelegate {
+public protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView, FeedErrorView {
      
-    var delegate: FeedViewControllerDelegate?
+    private var imageLoader: FeedImageDataLoader?
     @IBOutlet private(set) public var errorView: ErrorView?
     
-    private var imageLoader: FeedImageDataLoader?
-    var tableModel = [FeedImageCellController]() {
+    public var delegate: FeedViewControllerDelegate?
+    public var tableModel = [FeedImageCellController]() {
         didSet { tableView.reloadData() }
     }
      
@@ -33,6 +33,10 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     
     public func display(_ viewModel: FeedLoadingViewModel) {
         refreshControl?.update(isRefreshing: viewModel.isLoading)
+    }
+    
+    public func display(_ cellControllers: [FeedImageCellController]) {
+        tableModel = cellControllers
     }
     
     public func display(_ viewModel: FeedErrorViewModel) {

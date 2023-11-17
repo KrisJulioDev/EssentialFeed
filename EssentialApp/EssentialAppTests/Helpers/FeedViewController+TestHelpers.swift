@@ -43,7 +43,11 @@ extension FeedViewController {
 		let index = IndexPath(row: row, section: feedImagesSection)
 		ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
 	}
-	
+    
+    func renderedFeedImageData(at index: Int) -> Data? {
+        return simulateFeedImageViewVisible(at: index)?.renderedImage
+    }
+    
 	var errorMessage: String? {
 		return errorView?.message
 	}
@@ -56,12 +60,15 @@ extension FeedViewController {
 		return tableView.numberOfRows(inSection: feedImagesSection)
 	}
 	
-	func feedImageView(at row: Int) -> UITableViewCell? {
-		let ds = tableView.dataSource
-		let index = IndexPath(row: row, section: feedImagesSection)
-		return ds?.tableView(tableView, cellForRowAt: index)
-	}
-	
+    func feedImageView(at row: Int) -> UITableViewCell? {
+        guard numberOfRenderedFeedImageViews() > row else {
+            return nil
+        }
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: feedImagesSection)
+        return ds?.tableView(tableView, cellForRowAt: index)
+    }
+    
 	private var feedImagesSection: Int {
 		return 0
 	}

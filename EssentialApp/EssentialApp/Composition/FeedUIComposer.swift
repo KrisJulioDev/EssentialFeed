@@ -7,13 +7,14 @@
 
 import UIKit
 import EssentialFeed
+import EssentialFeediOS
 
 public final class FeedUIComposer {
     private init() {}
     
     public static func feedComposeWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
         let presentationAdapter = FeedLoaderPresentationAdapter(
-            feedLoader: MainDispatchQueueDecorator(decoratee: feedLoader)
+            feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader)
         )
         
         let feedController = makeFeedViewController(
@@ -23,13 +24,13 @@ public final class FeedUIComposer {
         
         presentationAdapter.presenter = FeedPresenter(
             feedView: FeedViewAdapter(controller: feedController, 
-                                      imageLoader: MainDispatchQueueDecorator(decoratee: imageLoader)),
+                                      imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
             loadingView: WeakRefVirtualProxy(feedController),
             errorView: WeakRefVirtualProxy(feedController)) 
         
         return feedController
     }
-     
+    
     private static func makeFeedViewController(delegate: FeedViewControllerDelegate, title: String) -> FeedViewController {
         let bundle = Bundle(for: FeedViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
