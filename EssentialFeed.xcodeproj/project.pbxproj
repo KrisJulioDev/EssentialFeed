@@ -86,6 +86,12 @@
 		35B62C412B023E19003F7A36 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B62C402B023E19003F7A36 /* FeedPresenter.swift */; };
 		35B62C432B023EAA003F7A36 /* Feed.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 35B62C422B023EAA003F7A36 /* Feed.xcstrings */; };
 		35CCF3E52B0727DA001853E7 /* FeedImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3E42B0727DA001853E7 /* FeedImageDataCache.swift */; };
+		35CCF3E72B074275001853E7 /* FeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3E62B074275001853E7 /* FeedSnapshotTests.swift */; };
+		35CCF3EC2B0852C3001853E7 /* UIViewController+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3EB2B0852C3001853E7 /* UIViewController+Snapshot.swift */; };
+		35CCF3EE2B085301001853E7 /* XCTestCase+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3ED2B085301001853E7 /* XCTestCase+Snapshot.swift */; };
+		35CCF3F02B085575001853E7 /* snapshots in Resources */ = {isa = PBXBuildFile; fileRef = 35CCF3EF2B085575001853E7 /* snapshots */; };
+		35CCF3F22B085839001853E7 /* UIImageTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3F12B085839001853E7 /* UIImageTestHelpers.swift */; };
+		35CCF3F62B085929001853E7 /* UITableView+HeaderSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3F52B085929001853E7 /* UITableView+HeaderSizing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +211,12 @@
 		35B62C402B023E19003F7A36 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		35B62C422B023EAA003F7A36 /* Feed.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Feed.xcstrings; sourceTree = "<group>"; };
 		35CCF3E42B0727DA001853E7 /* FeedImageDataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedImageDataCache.swift; sourceTree = "<group>"; };
+		35CCF3E62B074275001853E7 /* FeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSnapshotTests.swift; sourceTree = "<group>"; };
+		35CCF3EB2B0852C3001853E7 /* UIViewController+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIViewController+Snapshot.swift"; path = "EssentialFeediOSTests/UIViewController+Snapshot.swift"; sourceTree = SOURCE_ROOT; };
+		35CCF3ED2B085301001853E7 /* XCTestCase+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Snapshot.swift"; sourceTree = "<group>"; };
+		35CCF3EF2B085575001853E7 /* snapshots */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = snapshots; path = EssentialFeediOSTests/snapshots; sourceTree = SOURCE_ROOT; };
+		35CCF3F12B085839001853E7 /* UIImageTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageTestHelpers.swift; sourceTree = "<group>"; };
+		35CCF3F52B085929001853E7 /* UITableView+HeaderSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+HeaderSizing.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +361,8 @@
 		356906D02AFC76C200145049 /* EssentialFeediOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				35CCF3EA2B08529F001853E7 /* Helpers */,
+				35CCF3E62B074275001853E7 /* FeedSnapshotTests.swift */,
 			);
 			path = EssentialFeediOSTests;
 			sourceTree = "<group>";
@@ -518,9 +532,7 @@
 		35B62C1F2B019D8B003F7A36 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				35B62C202B019D99003F7A36 /* UITableView+Dequeueing.swift */,
-				35B62C222B01A01B003F7A36 /* UIImageView+Animations.swift */,
-				351EEE102B045AC900439D66 /* UIRefreshControler+Helpers.swift */,
+				35CCF3F42B085917001853E7 /* Helpers */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -563,6 +575,28 @@
 				35B62C422B023EAA003F7A36 /* Feed.xcstrings */,
 			);
 			path = "Feed Presentation";
+			sourceTree = "<group>";
+		};
+		35CCF3EA2B08529F001853E7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				35CCF3EF2B085575001853E7 /* snapshots */,
+				35CCF3ED2B085301001853E7 /* XCTestCase+Snapshot.swift */,
+				35CCF3EB2B0852C3001853E7 /* UIViewController+Snapshot.swift */,
+				35CCF3F12B085839001853E7 /* UIImageTestHelpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		35CCF3F42B085917001853E7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				35B62C202B019D99003F7A36 /* UITableView+Dequeueing.swift */,
+				35B62C222B01A01B003F7A36 /* UIImageView+Animations.swift */,
+				351EEE102B045AC900439D66 /* UIRefreshControler+Helpers.swift */,
+				35CCF3F52B085929001853E7 /* UITableView+HeaderSizing.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -775,6 +809,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35CCF3F02B085575001853E7 /* snapshots in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -818,6 +853,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35CCF3F62B085929001853E7 /* UITableView+HeaderSizing.swift in Sources */,
 				352C73CF2AFCEFAD002F526C /* UIView+Shimmering.swift in Sources */,
 				352C73D12AFCEFAD002F526C /* FeedViewController.swift in Sources */,
 				35B62C212B019D99003F7A36 /* UITableView+Dequeueing.swift in Sources */,
@@ -833,6 +869,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35CCF3E72B074275001853E7 /* FeedSnapshotTests.swift in Sources */,
+				35CCF3F22B085839001853E7 /* UIImageTestHelpers.swift in Sources */,
+				35CCF3EC2B0852C3001853E7 /* UIViewController+Snapshot.swift in Sources */,
+				35CCF3EE2B085301001853E7 /* XCTestCase+Snapshot.swift in Sources */,
 				352C73D42AFCEFE4002F526C /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

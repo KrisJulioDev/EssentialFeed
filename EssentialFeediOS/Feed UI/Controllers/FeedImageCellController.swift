@@ -10,7 +10,7 @@ import EssentialFeed
 
 public protocol FeedImageCellControllerDelegate {
     func didRequestImage()
-    func didCancelRequestImage()
+    func didCancelImageRequest()
 }
 
 public final class FeedImageCellController: FeedImageView {
@@ -33,7 +33,7 @@ public final class FeedImageCellController: FeedImageView {
     
     func cancelLoad() {
         releaseCellForReuse()
-        delegate.didCancelRequestImage()
+        delegate.didCancelImageRequest()
     }
     
     public func display(_ viewModel: FeedImageViewModel<UIImage>) {
