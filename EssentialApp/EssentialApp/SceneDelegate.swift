@@ -43,14 +43,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configureWindow() {
-        let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
-        let localImageLoader = LocalFeedImageDataLoader(store: store)
-        
         window?.rootViewController = UINavigationController(
             rootViewController: FeedUIComposer.feedComposeWith(
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                imageLoader: makeLocalImageLoaderWithRemoteFallback)
-            )
+                imageLoader: makeLocalImageLoaderWithRemoteFallback
+            ))
         
         window?.makeKeyAndVisible()
     }
@@ -98,14 +95,6 @@ public extension FeedImageDataLoader {
     }
 }
 
-extension Publisher where Output == Data {
-    func caching(to cache: FeedImageDataCache, using url: URL) -> AnyPublisher<Output, Failure> {
-        self.handleEvents(receiveOutput: { data in
-            cache.saveIgnoringResult(data, for: url)
-        }).eraseToAnyPublisher()
-    }
-}
-
 extension FeedImageDataCache {
     func saveIgnoringResult(_ data: Data, for url: URL) {
         save(data, for: url, completion: { _ in })
@@ -117,24 +106,6 @@ public extension FeedLoader {
     
     func loadPublisher() -> Publisher {
         Deferred { Future(self.load) }.eraseToAnyPublisher()
-    }
-}
-
-extension Publisher where Output == [FeedImage] {
-    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> {
-        self.handleEvents(receiveOutput: cache.saveIgnoringResult).eraseToAnyPublisher()
-    }
-}
-
-extension Publisher {
-    func fallback(to fallbackPublisher: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
-        self.catch { _ in fallbackPublisher() }.eraseToAnyPublisher()
-    }
-}
-
-extension Publisher {
-    func dispatchOnMainQueue() -> AnyPublisher<Output, Failure> {
-        receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
     }
 }
 
