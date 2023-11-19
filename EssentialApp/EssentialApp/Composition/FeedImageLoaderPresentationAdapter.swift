@@ -26,6 +26,7 @@ final class FeedImageLoaderPresentationAdapter<View: FeedImageView, Image>: Feed
         presenter?.didStartLoadingImageData(for: model)
         
         cancellable = imageLoader(model.url)
+            .dispatchOnMainQueue()
             .sink { [weak self, model] completion in
                 switch completion {
                 case .finished: break

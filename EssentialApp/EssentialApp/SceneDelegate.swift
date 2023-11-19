@@ -129,7 +129,7 @@ extension DispatchQueue {
         
         func schedule(options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
             guard Thread.isMainThread else {
-                return DispatchQueue.main.async(execute: action)
+                return DispatchQueue.main.schedule(options: options, action)
             }
             
             action()
