@@ -5,16 +5,22 @@
 //  Created by Khristoffer Julio on 11/10/23.
 //
 
-import UIKit
+import Foundation
 import EssentialFeed
 import EssentialFeediOS
+import UIKit
+import Combine
 
 public final class FeedUIComposer {
     private init() {}
     
-    public static func feedComposeWith(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) -> FeedViewController {
+    public static func feedComposeWith(
+        feedLoader: @escaping () -> FeedLoader.Publisher,
+        imageLoader: FeedImageDataLoader) 
+    -> FeedViewController {
+            
         let presentationAdapter = FeedLoaderPresentationAdapter(
-            feedLoader: MainQueueDispatchDecorator(decoratee: feedLoader)
+            feedLoader: feedLoader().dispatchOnMainQueue
         )
         
         let feedController = makeFeedViewController(
@@ -26,7 +32,7 @@ public final class FeedUIComposer {
             feedView: FeedViewAdapter(controller: feedController, 
                                       imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)),
             loadingView: WeakRefVirtualProxy(feedController),
-            errorView: WeakRefVirtualProxy(feedController)) 
+            errorView: WeakRefVirtualProxy(feedController))
         
         return feedController
     }

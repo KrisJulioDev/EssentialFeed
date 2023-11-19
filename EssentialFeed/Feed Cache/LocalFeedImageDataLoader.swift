@@ -6,7 +6,8 @@
 //
 
 import Foundation
- 
+ import Combine
+
 public final class LocalFeedImageDataLoader {
     let store: FeedImageDataStore
     
