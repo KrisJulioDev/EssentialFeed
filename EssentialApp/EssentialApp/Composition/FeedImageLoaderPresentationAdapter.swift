@@ -33,7 +33,7 @@ final class FeedImageLoaderPresentationAdapter<View: FeedImageView, Image>: Feed
         })
     }
     
-    func didCancelRequestImage() {
+    func didCancelImageRequest() {
         task?.cancel()
     }
 }
