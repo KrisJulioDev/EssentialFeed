@@ -151,7 +151,7 @@ final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
 
     private func makeItemsJSON(_ items: [[String: Any]]) -> Data {
         let json = ["items": items]
-        return try! JSONSerialization.data(withJSONObject: json)
+        return try!  JSONSerialization.data(withJSONObject: json)
     }
 
     private func expect(_ sut: RemoteImageCommentsLoader, toCompleteWith expectedResult: RemoteImageCommentsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
