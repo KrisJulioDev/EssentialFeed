@@ -1,13 +1,13 @@
 //
-//  RemoteFeedLoader.swift
+//  RemoteLoader.swift
 //  EssentialFeed
 //
-//  Created by Khristoffer Julio on 11/4/23.
+//  Created by Khristoffer Julio on 11/20/23.
 //
 
 import Foundation
 
-public final class RemoteFeedLoader: FeedLoader {
+public final class RemoteLoader: FeedLoader {
     private let url: URL
     private let client: HTTPClient
     
@@ -29,7 +29,7 @@ public final class RemoteFeedLoader: FeedLoader {
             
             switch result {
             case let .success((data, response)):
-                completion(RemoteFeedLoader.map(data, from: response))
+                completion(RemoteLoader.map(data, from: response))
                 
             case .failure:
                 completion(.failure(Error.connectivity))
