@@ -10,8 +10,7 @@ import Foundation
 public protocol FeedImageDataLoaderTask {
     func cancel()
 }
- 
-
+  
 public protocol FeedLoader {
     typealias Result = Swift.Result<[FeedImage], Error>
     
