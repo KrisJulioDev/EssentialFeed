@@ -66,11 +66,14 @@ final class LoadResourcePresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    func localized(_ key: String) -> String {
+    func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let table = "Shared"
         let bundle = Bundle(for: SUT.self)
-        let key = key
-        let localized = bundle.localizedString(forKey: key, value: "", table: "Feed")
-        return localized
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        return value
     }
     
     private final class ViewSpy: ResourceView, FeedErrorView, FeedLoadingView {

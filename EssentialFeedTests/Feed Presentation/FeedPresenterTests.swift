@@ -15,6 +15,10 @@ final class FeedPresenterTests: XCTestCase {
         XCTAssert(view.messages.isEmpty, "Expecting no messages upon creation")
     }
     
+    func test_title_isLocalized() {
+        XCTAssertEqual(FeedPresenter.title, localized("FEED_VIEW_TITLE"))
+    }
+    
     func test_load_didStartLoadingAndShowNoErrorOnStartLoad() {
         let (sut, view) = makeSUT()
         
@@ -36,6 +40,17 @@ final class FeedPresenterTests: XCTestCase {
         ])
     }
     
+    func test_didFinishLoadingFeedWithError_displaysLocalizedErrorMessageAndStopLoading() {
+        let (sut, view) = makeSUT()
+        
+        sut.didFinishLoadingFeed(with: anyNSError())
+        
+        XCTAssertEqual(view.messages, [
+            .display(errorMessage: localized("GENERIC_CONNECTION_ERROR", table: "Shared")),
+            .display(isLoading: false)
+        ])
+    }
+    
     // MARK: - Helper
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedPresenter, view: ViewSpy) {
@@ -45,12 +60,14 @@ final class FeedPresenterTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
     }
-    
-    func localized(_ key: String) -> String {
+     
+    private func localized(_ key: String, table: String = "Feed", file: StaticString = #file, line: UInt = #line) -> String {
         let bundle = Bundle(for: FeedPresenter.self)
-        let key = key
-        let localized = bundle.localizedString(forKey: key, value: "", table: "Feed")
-        return localized
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        return value
     }
     
     private final class ViewSpy: FeedView, FeedErrorView, FeedLoadingView {
