@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         localFeedLoader.validateCache { _ in }
     }
     
-    func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
+    func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[FeedImage], Error> {
         let remoteURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
 
         return httpClient
@@ -83,15 +83,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 extension FeedImageDataCache {
     func saveIgnoringResult(_ data: Data, for url: URL) {
         save(data, for: url, completion: { _ in })
-    }
-}
-
-extension RemoteLoader: FeedLoader where Resource == [FeedImage] {}
-                          
-public extension FeedLoader {
-    typealias Publisher = AnyPublisher<[FeedImage], Error>
-    
-    func loadPublisher() -> Publisher {
-        Deferred { Future(self.load) }.eraseToAnyPublisher()
     }
 }

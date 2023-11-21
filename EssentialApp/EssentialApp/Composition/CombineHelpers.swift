@@ -65,3 +65,11 @@ extension Publisher {
         receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
     }
 }
+
+public extension LocalFeedLoader {
+    typealias Publisher = AnyPublisher<[FeedImage], Error>
+    
+    func loadPublisher() -> Publisher {
+        Deferred { Future(self.load) }.eraseToAnyPublisher()
+    }
+}
