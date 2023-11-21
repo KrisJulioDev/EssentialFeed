@@ -58,9 +58,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
         let remoteURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
-        let remoteFeedLoader = RemoteLoader(url: remoteURL, client: httpClient, mapper: FeedItemsMapper.map)
-        return remoteFeedLoader
-            .loadPublisher()
+
+        return httpClient
+            .getPublisher(url: remoteURL)
+            .tryMap(FeedItemsMapper.map)
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
     }
@@ -79,22 +80,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-public extension FeedImageDataLoader {
-    typealias Publisher = AnyPublisher<Data, Error>
-    
-    func loadImageDataPublisher(from url: URL) -> Publisher {
-        var task: FeedImageDataLoaderTask?
-        
-        return Deferred {
-            Future { completion in
-                task = self.loadImageData(from: url, completion: completion)
-            }
-        }
-        .handleEvents(receiveCancel: { task?.cancel() })
-        .eraseToAnyPublisher()
-    }
-}
-
 extension FeedImageDataCache {
     func saveIgnoringResult(_ data: Data, for url: URL) {
         save(data, for: url, completion: { _ in })
@@ -109,4 +94,4 @@ public extension FeedLoader {
     func loadPublisher() -> Publisher {
         Deferred { Future(self.load) }.eraseToAnyPublisher()
     }
-} 
+}
