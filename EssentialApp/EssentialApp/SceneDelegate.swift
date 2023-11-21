@@ -58,7 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeRemoteFeedLoaderWithLocalFallback() -> FeedLoader.Publisher {
         let remoteURL = URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed.json")!
-        let remoteFeedLoader = RemoteFeedLoader(url: remoteURL, client: httpClient)
+        let remoteFeedLoader = RemoteFeedLoder(url: remoteURL, client: httpClient)
         return remoteFeedLoader
             .loadPublisher()
             .caching(to: localFeedLoader)
@@ -100,60 +100,13 @@ extension FeedImageDataCache {
         save(data, for: url, completion: { _ in })
     }
 }
+
+extension RemoteLoader: FeedLoader where Resource == [FeedImage] {}
                           
 public extension FeedLoader {
     typealias Publisher = AnyPublisher<[FeedImage], Error>
     
     func loadPublisher() -> Publisher {
         Deferred { Future(self.load) }.eraseToAnyPublisher()
-    }
-}
-
-extension DispatchQueue {
-    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler {
-        ImmediateWhenOnMainQueueScheduler.shared
-    }
-    
-    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
-        
-        typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
-        typealias SchedulerOptions = DispatchQueue.SchedulerOptions
-        
-        var now: DispatchQueue.SchedulerTimeType {
-            DispatchQueue.main.now
-        }
-        
-        var minimumTolerance: DispatchQueue.SchedulerTimeType.Stride {
-            DispatchQueue.main.minimumTolerance
-        }
-        
-        static let shared = Self()
-        
-        private static let key = DispatchSpecificKey<UInt8>()
-        private static let value = UInt8.max
-        
-        private init() {
-            DispatchQueue.main.setSpecific(key: Self.key, value: Self.value)
-        }
-        
-        func isMainQueue() -> Bool {
-            DispatchQueue.getSpecific(key: Self.key) == Self.value
-        }
-        
-        func schedule(options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
-            guard isMainQueue() else {
-                return DispatchQueue.main.schedule(options: options, action)
-            }
-            
-            action()
-        }
-        
-        func schedule(after date: DispatchQueue.SchedulerTimeType, interval: DispatchQueue.SchedulerTimeType.Stride, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
-            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
-        }
-        
-        func schedule(after date: DispatchQueue.SchedulerTimeType, tolerance: DispatchQueue.SchedulerTimeType.Stride, options: DispatchQueue.SchedulerOptions?, _ action: @escaping () -> Void) {
-            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
-        }
     }
 }
