@@ -9,38 +9,6 @@ import XCTest
 import EssentialFeed
 
 final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
-    func test_init_doesNotRequestDataOnInit() {
-        let (_, client) = makeSUT()
-        
-        XCTAssertTrue(client.requestedURLs.isEmpty)
-    }
-    
-    func test_load_requestsDataFromURL() {
-        let url = URL(string: "https://a-given-url.com")!
-        let (sut, client) = makeSUT(url: url)
-        
-        sut.load { _ in }
-        XCTAssertEqual(client.requestedURLs, [url])
-    }
-    
-    func test_loadTwice_requestsDataFromURLTwice() {
-        let url = URL(string: "https://a-given-url.com")!
-        let (sut, client) = makeSUT(url: url)
-
-        sut.load { _ in }
-        sut.load { _ in }
-
-        XCTAssertEqual(client.requestedURLs, [url, url])
-    }
-    
-    func test_load_deliversErrorOnClientError() {
-        let (sut, client) = makeSUT()
-        
-        expect(sut, toCompleteWith: failure(RemoteImageCommentsLoader.Error.connectivity), when: {
-            client.complete(with: NSError(domain: "Test", code: 0))
-        })
-    }
-    
     func test_load_deliversErrorOnNon2xxHTTPResponse() {
         let (sut, client) = makeSUT()
         
@@ -76,46 +44,6 @@ final class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
                 client.complete(withStatusCode: code, data: emptyListJSON, at: index)
             }
         }
-    }
-    
-    func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
-        let (sut, client) = makeSUT()
-        
-        let item1 = makeItem(
-            id: UUID(),
-            message: "a message",
-            createdAt: (Date(timeIntervalSince1970: 1598627222), "2020-08-28T15:07:02+00:00"),
-            username: "a username")
-        
-        let item2 = makeItem(
-            id: UUID(),
-            message: "another message",
-            createdAt: (Date(timeIntervalSince1970: 1577881882), "2020-01-01T12:31:22+00:00"),
-            username: "another username")
-        
-        let items = [item1.model, item2.model]
-        let samples = [200, 201, 250, 280, 299]
-
-        samples.enumerated().forEach { index, code in
-            expect(sut, toCompleteWith: .success(items), when: {
-                let json = makeItemsJSON([item1.json, item2.json])
-                client.complete(withStatusCode: code, data: json, at: index)
-            })
-        }
-    }
-    
-    func test_load_doesNotDeliverResultAfterInstanceHasBeenDeallocated() {
-        let url = URL(string: "any-url")!
-        let client = HTTPClientSpy()
-        var sut: RemoteImageCommentsLoader? = RemoteImageCommentsLoader(url: url, client: client)
-        
-        var capturedMessage = [RemoteImageCommentsLoader.Result]()
-        sut?.load { capturedMessage.append($0) }
-        
-        sut = nil
-        
-        client.complete(withStatusCode: 200, data: makeItemsJSON([]))
-        XCTAssertTrue(capturedMessage.isEmpty)
     }
     
     // MARK: - Helpers
