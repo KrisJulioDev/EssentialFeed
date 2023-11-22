@@ -17,7 +17,8 @@ final class FeedViewAdapter: ResourceView {
         self.controller = controller
         self.imageLoader = imageLoader
     }
-    
+    struct InvalidImageData: Error {}
+
     func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feed.map { model in
             
@@ -26,7 +27,7 @@ final class FeedViewAdapter: ResourceView {
             })
             
             let view = FeedImageCellController(
-                viewModel: FeedImagePresenter<FeedImageCellController, UIImage>.map(model),
+                viewModel: FeedImagePresenter.map(model),
                 delegate: adapter)
             
             adapter.presenter = LoadResourcePresenter(
