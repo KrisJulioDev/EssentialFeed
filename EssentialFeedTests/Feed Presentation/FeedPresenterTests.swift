@@ -14,8 +14,12 @@ final class FeedPresenterTests: XCTestCase {
 
         XCTAssert(view.messages.isEmpty, "Expecting no messages upon creation")
     }
-    
-    func test_title_isLocalized() {
+     
+    func test_map_createsViewModel() {
+        let feed = uniqueImageFeed().models
+        
+        let viewModel = FeedPresenter.map(feed)
+        
         XCTAssertEqual(FeedPresenter.title, localized("FEED_VIEW_TITLE"))
     }
     
