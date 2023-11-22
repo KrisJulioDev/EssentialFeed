@@ -48,7 +48,7 @@ final class LoadResourcePresenterTests: XCTestCase {
         
         XCTAssertEqual(view.messages, [
             .display(isLoading: false),
-            .display(resourceViewModel: "resource view model")
+            .display(errorMessage: localized("GENERIC_CONNECTION_ERROR"))
         ])
     }
     
