@@ -9,10 +9,8 @@ import XCTest
 import EssentialFeed
 
 final class FeedPresenterTests: XCTestCase {
-    func test_init_doesNotSendErrorToView() {
-        let (_, view) = makeSUT()
-
-        XCTAssert(view.messages.isEmpty, "Expecting no messages upon creation")
+    func test_title_isLocalized() {
+        XCTAssertEqual(FeedPresenter.title, localized("FEED_VIEW_TITLE"))
     }
      
     func test_map_createsViewModel() {
@@ -20,50 +18,10 @@ final class FeedPresenterTests: XCTestCase {
         
         let viewModel = FeedPresenter.map(feed)
         
-        XCTAssertEqual(FeedPresenter.title, localized("FEED_VIEW_TITLE"))
+        XCTAssertEqual(feed, viewModel.feed)
     }
-    
-    func test_load_didStartLoadingAndShowNoErrorOnStartLoad() {
-        let (sut, view) = makeSUT()
-        
-        sut.didStartLoadingFeed()
-        
-        XCTAssertEqual(view.messages, [.display(errorMessage: .none),
-                                       .display(isLoading: true)])
-    }
-    
-    func test_loadFinish_hideLoadingAndShowFeed() {
-        let (sut, view) = makeSUT()
-        let feed = uniqueImageFeed().models
-        
-        sut.didFinishLoadingFeed(with: feed)
-        
-        XCTAssertEqual(view.messages, [
-            .display(isLoading: false),
-            .display(feed: feed)
-        ])
-    }
-    
-    func test_didFinishLoadingFeedWithError_displaysLocalizedErrorMessageAndStopLoading() {
-        let (sut, view) = makeSUT()
-        
-        sut.didFinishLoadingFeed(with: anyNSError())
-        
-        XCTAssertEqual(view.messages, [
-            .display(errorMessage: localized("GENERIC_CONNECTION_ERROR", table: "Shared")),
-            .display(isLoading: false)
-        ])
-    }
-    
+     
     // MARK: - Helper
-    
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedPresenter, view: ViewSpy) {
-        let view = ViewSpy()
-        let sut = FeedPresenter(feedView: view, loadingView: view, errorView: view)
-        trackForMemoryLeaks(view, file: file, line: line)
-        trackForMemoryLeaks(sut, file: file, line: line)
-        return (sut, view)
-    }
      
     private func localized(_ key: String, table: String = "Feed", file: StaticString = #file, line: UInt = #line) -> String {
         let bundle = Bundle(for: FeedPresenter.self)
@@ -73,27 +31,5 @@ final class FeedPresenterTests: XCTestCase {
         }
         return value
     }
-    
-    private final class ViewSpy: FeedView, ResourceErrorView, ResourceLoadingView {
-        
-        enum Messages: Hashable {
-            case display(feed: [FeedImage])
-            case display(errorMessage: String?)
-            case display(isLoading: Bool)
-        }
-        
-        private(set) var messages = Set<Messages>()
-        
-        func display(_ viewModel: ResourceErrorViewModel) {
-            messages.insert(.display(errorMessage: viewModel.message))
-        }
-         
-        func display(_ viewModel: ResourceLoadingViewModel) {
-            messages.insert(.display(isLoading: viewModel.isLoading))
-        }
-        
-        func display(_ viewModel: FeedViewModel) {
-            messages.insert(.display(feed: viewModel.feed))
-        }
-    }
+     
 }
