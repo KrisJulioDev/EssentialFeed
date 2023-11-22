@@ -63,7 +63,7 @@ public final class FeedImagePresenter<View: FeedImageView, Image> where View.Ima
             location: image.location,
             image: nil,
             isLoading: false,
-            shouldRetry: true)
+            shouldRetry: false)
     }
 }
 

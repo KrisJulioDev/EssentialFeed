@@ -34,7 +34,7 @@ final class FeedImageLoaderPresentationAdapter<View: FeedImageView, Image>: Feed
                     self?.presenter?.didFinishLoadingImage(with: error, for: model)
                 }
             } receiveValue: { [weak self, model] data in
-                self?.presenter?.didStartLoadingImageData(with: data, for: model)
+//                self?.presenter?.didFinishLoadingImage(with: data, for: model)
             }
     } 
     
