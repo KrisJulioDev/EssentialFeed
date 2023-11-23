@@ -12,13 +12,19 @@ public protocol FeedViewControllerDelegate {
     func didRequestFeedRefresh()
 }
 
+public protocol CellController {
+    func view(in: UITableView) -> UITableViewCell
+    func preload()
+    func cancelLoad()
+}
+
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
      
     private var imageLoader: FeedImageDataLoader?
     @IBOutlet private(set) public var errorView: ErrorView?
     
     public var delegate: FeedViewControllerDelegate?
-    public var tableModel = [FeedImageCellController]() {
+    public var tableModel = [CellController]() {
         didSet { tableView.reloadData() }
     }
      
@@ -41,7 +47,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         refreshControl?.update(isRefreshing: viewModel.isLoading)
     }
     
-    public func display(_ cellControllers: [FeedImageCellController]) {
+    public func display(_ cellControllers: [CellController]) {
         tableModel = cellControllers
     }
     
@@ -71,7 +77,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         indexPaths.forEach { cancelControllerLoad(forRowAt: $0) }
 	}
     
-    func cellController(for indexPath: IndexPath) -> FeedImageCellController {
+    func cellController(for indexPath: IndexPath) -> CellController {
         return tableModel[indexPath.row]
     }
 	
