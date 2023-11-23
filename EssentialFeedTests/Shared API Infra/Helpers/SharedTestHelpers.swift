@@ -26,8 +26,8 @@ extension HTTPURLResponse {
 }
 
 extension Date {
-    func adding(days: Int) -> Date {
-        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    func adding(days: Int, calendar: Calendar = Calendar(identifier: .gregorian)) -> Date {
+        return calendar.date(byAdding: .day, value: days, to: self)!
     }
     
     func adding(seconds: TimeInterval) -> Date {
