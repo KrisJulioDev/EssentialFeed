@@ -18,6 +18,11 @@ public protocol CellController {
     func cancelLoad()
 }
 
+extension CellController {
+    public func preload() {}
+    public func cancelLoad() {}
+}
+
 final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
      
     private var imageLoader: FeedImageDataLoader?
