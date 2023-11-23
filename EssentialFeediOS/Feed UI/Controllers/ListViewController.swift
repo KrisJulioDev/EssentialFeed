@@ -23,7 +23,8 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     private var imageLoader: FeedImageDataLoader?
     @IBOutlet private(set) public var errorView: ErrorView?
     
-    public var delegate: FeedViewControllerDelegate?
+    public var onRefresh: (() -> Void)?
+    
     public var tableModel = [CellController]() {
         didSet { tableView.reloadData() }
     }
@@ -40,7 +41,7 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     @IBAction func refresh() {
-        delegate?.didRequestFeedRefresh()
+        onRefresh?()
     }
     
     public func display(_ viewModel: ResourceLoadingViewModel) {
