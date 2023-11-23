@@ -1,5 +1,5 @@
 //
-//  FeedViewControllerTests.swift
+//  ListViewController.swift
 //  EssentialFeediOSTests
 //
 //  Created by Khristoffer Julio on 11/9/23.
@@ -18,7 +18,7 @@ public protocol CellController {
     func cancelLoad()
 }
 
-final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
+final public class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
      
     private var imageLoader: FeedImageDataLoader?
     @IBOutlet private(set) public var errorView: ErrorView?
