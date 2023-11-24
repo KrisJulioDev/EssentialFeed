@@ -13,6 +13,10 @@ extension ListViewController {
 	func simulateUserInitiatedFeedReload() {
 		refreshControl?.simulatePullToRefresh()
 	}
+    
+    func simulateErrorTap() {
+        errorView.simulateTap()
+    }
 	
 	@discardableResult
 	func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
@@ -49,7 +53,7 @@ extension ListViewController {
     }
     
 	var errorMessage: String? {
-		return errorView?.message
+        return errorView.message
 	}
 
 	var isShowingLoadingIndicator: Bool {
