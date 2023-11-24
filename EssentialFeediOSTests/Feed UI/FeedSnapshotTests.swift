@@ -26,7 +26,7 @@ final class FeedSnapshotTests: XCTestCase {
 
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "FEED_WITH_CONTENT_light")
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "FEED_WITH_CONTENT_dark")
-    } 
+    }
     
     func test_feedWithFailedImageLoading() {
         let sut = makeSUT()
@@ -49,7 +49,7 @@ final class FeedSnapshotTests: XCTestCase {
         return controller
     }
     
-    private func emptyFeed() -> [FeedImageCellController] { [] }
+    private func emptyFeed() -> [CellController] { [] }
     
     private func feedWithContent() -> [ImageStub] {
         return [
@@ -104,10 +104,10 @@ final class FeedSnapshotTests: XCTestCase {
 
 private extension ListViewController {
     func display(_ stubs: [ImageStub]) {
-        let cells: [FeedImageCellController] = stubs.map { stub in
+        let cells: [CellController] = stubs.map { stub in
             let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
             stub.controller = cellController
-            return cellController
+            return CellController(cellController)
         }
         
         display(cells)
