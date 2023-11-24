@@ -53,6 +53,7 @@ public final class ErrorView: UIButton {
 
     private func showAnimated(_ message: String) {
         setTitle(message, for: .normal)
+        
         contentEdgeInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
         
         UIView.animate(withDuration: 0.25) {
