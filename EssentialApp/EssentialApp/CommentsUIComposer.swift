@@ -1,8 +1,8 @@
 //
-//  FeedUIComposer.swift
-//  EssentialFeediOS
+//  CommentsUIComposer.swift
+//  EssentialApp
 //
-//  Created by Khristoffer Julio on 11/10/23.
+//  Created by Khristoffer Julio on 11/25/23.
 //
  
 import UIKit
@@ -10,24 +10,23 @@ import Combine
 import EssentialFeed
 import EssentialFeediOS
 
-public final class FeedUIComposer {
+public final class CommentsUIComposer {
     private init() {}
     
-    public static func feedComposeWith(
-        feedLoader: @escaping () -> AnyPublisher<[FeedImage], Error>,
-        imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher)
+    typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter>
+    
+    public static func commentsComposeWith(
+        commentsLoader: @escaping () -> AnyPublisher<[FeedImage], Error>)
     -> ListViewController {
             
-        let presentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter>(
-            loader: feedLoader
-        )
+        let presentationAdapter = FeedPresentationAdapter(loader: commentsLoader)
         
         let feedController = makeFeedViewController(title: FeedPresenter.title)
         feedController.onRefresh = presentationAdapter.loadResource
         
         presentationAdapter.presenter = LoadResourcePresenter(
             resourceView: FeedViewAdapter(controller: feedController,
-                                      imageLoader: imageLoader),
+                                          imageLoader: { _ in Empty<Data, Error>().eraseToAnyPublisher() }),
             loadingView: WeakRefVirtualProxy(feedController),
             errorView: WeakRefVirtualProxy(feedController),
             mapper: FeedPresenter.map)
