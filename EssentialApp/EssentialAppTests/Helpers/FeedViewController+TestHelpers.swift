@@ -1,5 +1,5 @@
 //
-//  FeedViewControllerTests+Localization.swift
+//  ListViewController+TestHelpers.swift
 //  EssentialFeediOSTests
 //
 //  Created by Khristoffer Julio on 11/13/23.
@@ -10,6 +10,18 @@ import UIKit
 import EssentialFeediOS
 
 extension ListViewController {
+    
+    @discardableResult
+    func simulateFeedImageBecomingVisibleAgain(at row: Int) -> FeedImageCell? {
+        let view = simulateFeedImageViewNotVisible(at: row)
+        
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: feedImagesSection)
+        delegate?.tableView?(tableView, willDisplay: view!, forRowAt: index)
+        
+        return view
+    }
+    
 	func simulateUserInitiatedFeedReload() {
 		refreshControl?.simulatePullToRefresh()
 	}
@@ -42,7 +54,7 @@ extension ListViewController {
 	
 	func simulateFeedImageViewNotNearVisible(at row: Int) {
 		simulateFeedImageViewNearVisible(at: row)
-		
+        
 		let ds = tableView.prefetchDataSource
 		let index = IndexPath(row: row, section: feedImagesSection)
 		ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
@@ -73,7 +85,7 @@ extension ListViewController {
         return ds?.tableView(tableView, cellForRowAt: index)
     }
     
-	private var feedImagesSection: Int {
+	public var feedImagesSection: Int {
 		return 0
 	}
 }

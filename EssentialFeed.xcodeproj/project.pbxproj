@@ -454,6 +454,13 @@
 			path = EssentialFeedCacheIntegrationTests;
 			sourceTree = "<group>";
 		};
+		354E94D32B107BDB00947554 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		355BBB702B0F4FE300EE1737 /* Shared UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -466,6 +473,7 @@
 		355BBB712B0F4FEE00EE1737 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				354E94D32B107BDB00947554 /* Helpers */,
 				352C73CE2AFCEFAD002F526C /* ListViewController.swift */,
 				355BBB9F2B1021C000EE1737 /* CellController.swift */,
 			);
