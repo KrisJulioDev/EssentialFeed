@@ -4,31 +4,36 @@
 //
 //  Created by Khristoffer Julio on 11/24/23.
 //
-
+ 
 import XCTest
+import UIKit
+import Combine
+import EssentialFeed
+import EssentialFeediOS
+import EssentialApp
 
 final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
-    /*
-    override func test_load_viewHasTitle() {
+    
+    func test_load_commentViewHasTitle() {
         let (sut, _) = makeSUT()
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.title, feedTitle)
+        XCTAssertEqual(sut.title, commentsTitle)
     }
     
     override func test_loadFeedActions_requestFeedFromLoader() {
         let (sut, loader) = makeSUT()
-        XCTAssertEqual(loader.loadFeedCallCount, 0, "Expected no loading requests before view is loaded")
+        XCTAssertEqual(loader.loadRequestCallCount, 0, "Expected no loading requests before view is loaded")
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.loadFeedCallCount, 1, "Expected a loading request once view is loaded")
+        XCTAssertEqual(loader.loadRequestCallCount, 1, "Expected a loading request once view is loaded")
         
-        sut.simulateUserInitiatedFeedReload()
-        XCTAssertEqual(loader.loadFeedCallCount, 2, "Expected another loading request once user initiates a reload")
+        sut.simulateUserInitiatedReload()
+        XCTAssertEqual(loader.loadRequestCallCount, 2, "Expected another loading request once user initiates a reload")
         
-        sut.simulateUserInitiatedFeedReload()
-        XCTAssertEqual(loader.loadFeedCallCount, 3, "Expected yet another loading request once user initiates another reload")
-    }*/
+        sut.simulateUserInitiatedReload()
+        XCTAssertEqual(loader.loadRequestCallCount, 3, "Expected yet another loading request once user initiates another reload")
+    }
     /*
     override func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
         let image0 = makeImage(description: "a description", location: "a location")
@@ -86,16 +91,72 @@ final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         sut.simulateErrorTap()
         XCTAssertEqual(sut.errorMessage, nil)
     }
-    
+     */
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.feedComposeWith(feedLoader: loader.loadPublisher,
-                                                 imageLoader: loader.loadImageDataPublisher)
+        let sut = CommentsUIComposer.commentsComposeWith(commentsLoader: loader.loadPublisher)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
+    }
+    
+    private class LoaderSpy: FeedImageDataLoader {
+        
+        // MARK: - FeedLoader
+        
+        private var requests = [PassthroughSubject<[FeedImage], Error>]()
+        
+        var loadRequestCallCount: Int {
+            return requests.count
+        }
+        
+        func loadPublisher() -> AnyPublisher<[FeedImage], Error> {
+            let publisher = PassthroughSubject<[FeedImage], Error>()
+            requests.append(publisher)
+            return publisher.eraseToAnyPublisher()
+        }
+        
+        func completeFeedLoading(with feed: [FeedImage] = [], at index: Int = 0) {
+            requests[index].send(feed)
+        }
+        
+        func completeFeedLoadingWithError(at index: Int = 0) {
+            let error = NSError(domain: "an error", code: 0)
+            requests[index].send(completion: .failure(error))
+        }
+        
+        // MARK: - FeedImageDataLoader
+        
+        private struct TaskSpy: FeedImageDataLoaderTask {
+            let cancelCallback: () -> Void
+            func cancel() {
+                cancelCallback()
+            }
+        }
+        
+        private var imageRequests = [(url: URL, completion: (FeedImageDataLoader.Result) -> Void)]()
+        
+        var loadedImageURLs: [URL] {
+            return imageRequests.map { $0.url }
+        }
+        
+        private(set) var cancelledImageURLs = [URL]()
+        
+        func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+            imageRequests.append((url, completion))
+            return TaskSpy { [weak self] in self?.cancelledImageURLs.append(url) }
+        }
+        
+        func completeImageLoading(with imageData: Data = Data(), at index: Int = 0) {
+            imageRequests[index].completion(.success(imageData))
+        }
+        
+        func completeImageLoadingWithError(at index: Int = 0) {
+            let error = NSError(domain: "an error", code: 0)
+            imageRequests[index].completion(.failure(error))
+        }
     }
     
     private func makeImage(description: String? = nil, location: String? = nil, url: URL = URL(string: "http://any-url.com")!) -> FeedImage {
@@ -104,6 +165,6 @@ final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
     
     private func anyImageData() -> Data {
         UIImage.make(withColor: .red).pngData()!
-    }*/
+    }
 }
 
