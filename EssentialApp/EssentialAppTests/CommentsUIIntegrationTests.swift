@@ -48,6 +48,19 @@ final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         assertThat(sut, isRendering: [comment0])
     }
     
+    func test_loadCommentsCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeCommentsLoading()
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1)
+    }
+    
     func test_loadCommentCompletion_rendersSuccessfullyLoadedComment() {
         let comment0 = makeComment(message: "a msg", username: "a usrnme")
         let comment1 = makeComment(username: "a 1233")
@@ -174,4 +187,4 @@ final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
     private func makeComment(message: String = "any message", username: String = "any username") -> ImageComment {
         return ImageComment(id: UUID(), message: message, createdAt: Date(), username: username)
     }
-} 
+}
