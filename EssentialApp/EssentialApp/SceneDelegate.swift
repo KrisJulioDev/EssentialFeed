@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }()
     
     private lazy var baseURL: URL = {
-       URL(string: "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/")!
+       URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
     }()
     
     private lazy var store: FeedStore & FeedImageDataStore = {
@@ -59,7 +59,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func showComments(for image: FeedImage) {
-        let url = baseURL.appendingPathComponent("/essential_app_feed_comments.json")
+        let url = ImageCommentsEndpoint.get(image.id.uuidString).with(baseURL)
         let comments = CommentsUIComposer.commentsComposeWith(commentsLoader: makeRemoteCommentsLoader(url: url))
         navigationController.pushViewController(comments, animated: true)
     }

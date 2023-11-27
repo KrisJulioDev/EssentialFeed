@@ -95,12 +95,17 @@ final class FeedAcceptanceTests: XCTestCase {
         return (makeData(for: url), response)
     }
     
+    private lazy var baseURL: URL = {
+       URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
+    }()
+    
     private func makeData(for url: URL) -> Data {
+        debugPrint("url string \(url.absoluteString)")
         switch url.absoluteString {
         case "http://image.com":
             return makeImageData()
             
-        case "https://static1.squarespace.com/static/5891c5b8d1758ec68ef5dbc2/t/5db4155a4fbade21d17ecd28/1572083034355/essential_app_feed_comments.json":
+        case "https://ile-api.essentialdeveloper.com/essential-feed/v1/image/90AE512C-A9F5-4AA1-9CA4-F231C8CF3F40/comments":
             return makeCommentsData()
             
         default:
@@ -114,7 +119,7 @@ final class FeedAcceptanceTests: XCTestCase {
     
     private func makeFeedData() -> Data {
         return try! JSONSerialization.data(withJSONObject: ["items": [
-            ["id": UUID().uuidString, "image": "http://image.com"],
+            ["id": "90AE512C-A9F5-4AA1-9CA4-F231C8CF3F40", "image": "http://image.com"],
             ["id": UUID().uuidString, "image": "http://image.com"]
         ]])
     }
