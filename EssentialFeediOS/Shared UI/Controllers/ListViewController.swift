@@ -16,9 +16,7 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
      
     private var cell: ImageCommentCell?
     private var imageLoader: FeedImageDataLoader?
-    private(set) public var errorView = ErrorView()
-    
-    private var loadingController = [IndexPath: CellController]()
+    private(set) public var errorView = ErrorView() 
     
     public lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
         .init(tableView: tableView) { tableView, indexPath, controller in
@@ -27,6 +25,8 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
     }()
     
     public var onRefresh: (() -> Void)?
+    public var onSelect: (() -> Void)?
+    
 	public override func viewDidLoad() {
 		super.viewDidLoad()
         
@@ -89,6 +89,11 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
         errorView.message = viewModel.message
     }
 	
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let dl = cellController(at: indexPath)?.delegate
+        dl?.tableView?(tableView, didSelectRowAt: indexPath)
+    }
+    
 	public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         self.cell = nil
         let dl = cellController(at: indexPath)?.delegate
@@ -113,3 +118,4 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
         dataSource.itemIdentifier(for: indexPath)
     }
 }
+
