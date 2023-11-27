@@ -12,7 +12,7 @@ import EssentialFeed
 import EssentialFeediOS
 import EssentialApp
 
-final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
+final class CommentsUIIntegrationTests: XCTestCase {
     
     func test_load_commentViewHasTitle() {
         let (sut, _) = makeSUT()
@@ -90,7 +90,7 @@ final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         XCTAssertEqual(sut.errorMessage, nil)
     }
     
-    override func test_tapOnErrorView_hidesErrorMessage() {
+    func test_tapOnErrorView_hidesErrorMessage() {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -102,7 +102,29 @@ final class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         sut.simulateErrorTap()
         XCTAssertEqual(sut.errorMessage, nil)
     }
-     
+    
+    func test_deinit_cancelsRunningRequests() {
+        var cancelCount = 0
+        
+        var sut: ListViewController?
+        autoreleasepool {
+            sut = CommentsUIComposer.commentsComposeWith(commentsLoader: {
+                PassthroughSubject<[ImageComment], Error>()
+                    .handleEvents(receiveCancel: {
+                        cancelCount += 1
+                    }).eraseToAnyPublisher()
+            })
+            
+            sut?.loadViewIfNeeded()
+        }
+        
+        XCTAssertEqual(cancelCount, 0)
+        
+        sut = nil
+        
+        XCTAssertEqual(cancelCount, 1)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {

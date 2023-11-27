@@ -17,7 +17,7 @@ func anyNSError() -> NSError {
  
 func anyData() -> Data {
     return Data("any data".utf8)
-}
+} 
 
 extension HTTPURLResponse {
     convenience init(statusCode: Int) {
