@@ -73,7 +73,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[FeedImage], Error> {
+    func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<Paginated<FeedImage>, Error> {
         let url = baseURL.appendingPathComponent("/essential_app_feed.json")
 
         return httpClient
@@ -81,6 +81,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .tryMap(FeedItemsMapper.map)
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
+            .map { Paginated(items: $0) }
+            .eraseToAnyPublisher()
     }
     
     func sceneWillResignActive(_ scene: UIScene) {

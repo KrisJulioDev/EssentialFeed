@@ -9,7 +9,7 @@ import Combine
 import EssentialFeed
 import EssentialFeediOS
 
-final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
+public final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
     private let loader: () -> AnyPublisher<Resource, Error>
     var presenter: LoadResourcePresenter<Resource, View>?
     var cancellable: Cancellable?
@@ -36,17 +36,17 @@ final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
 }
 
 extension LoadResourcePresentationAdapter: FeedViewControllerDelegate {
-    func didRequestFeedRefresh() {
+    public func didRequestFeedRefresh() {
         loadResource()
     }
 }
 
 extension LoadResourcePresentationAdapter: FeedImageCellControllerDelegate {
-    func didRequestImage() {
+    public func didRequestImage() {
         loadResource()
     }
 
-    func didCancelImageRequest() {
+    public func didCancelImageRequest() {
         cancellable?.cancel()
         cancellable = nil
     }

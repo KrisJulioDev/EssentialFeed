@@ -121,6 +121,7 @@
 		35CCF3EE2B085301001853E7 /* XCTestCase+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3ED2B085301001853E7 /* XCTestCase+Snapshot.swift */; };
 		35CCF3F22B085839001853E7 /* UIImageTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3F12B085839001853E7 /* UIImageTestHelpers.swift */; };
 		35CCF3F62B085929001853E7 /* UITableView+HeaderSizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CCF3F52B085929001853E7 /* UITableView+HeaderSizing.swift */; };
+		35D214FB2B16041300E7BADB /* Paginated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D214FA2B16041300E7BADB /* Paginated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -277,6 +278,7 @@
 		35CCF3ED2B085301001853E7 /* XCTestCase+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Snapshot.swift"; sourceTree = "<group>"; };
 		35CCF3F12B085839001853E7 /* UIImageTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageTestHelpers.swift; sourceTree = "<group>"; };
 		35CCF3F52B085929001853E7 /* UITableView+HeaderSizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+HeaderSizing.swift"; sourceTree = "<group>"; };
+		35D214FA2B16041300E7BADB /* Paginated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -771,6 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				3584C0DE2AF70521000F4A4E /* HTTPClient.swift */,
+				35D214FA2B16041300E7BADB /* Paginated.swift */,
 			);
 			path = "Shared API";
 			sourceTree = "<group>";
@@ -1220,6 +1223,7 @@
 				35B3F1D62B049E0F00EE2BC0 /* URLHTTPResponse+Helper.swift in Sources */,
 				358DF7402B0615D000E7ECA8 /* CoreDataFeedStore+FeedImageDataLoader.swift in Sources */,
 				35A182F82AF6274F007073A1 /* FeedImage.swift in Sources */,
+				35D214FB2B16041300E7BADB /* Paginated.swift in Sources */,
 				3584C0FF2AF781CB000F4A4E /* URLSessionHTTPClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
