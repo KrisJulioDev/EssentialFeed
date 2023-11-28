@@ -16,7 +16,7 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
      
     private var cell: ImageCommentCell?
     private var imageLoader: FeedImageDataLoader?
-    private(set) public var errorView = ErrorView() 
+    private(set) public var errorView = ErrorView()
     
     public lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
         .init(tableView: tableView) { tableView, indexPath, controller in
@@ -24,8 +24,7 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
         }
     }()
     
-    public var onRefresh: (() -> Void)?
-    public var onSelect: (() -> Void)?
+    public var onRefresh: (() -> Void)? 
     
 	public override func viewDidLoad() {
 		super.viewDidLoad()
@@ -78,11 +77,7 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
             snapshot.appendItems(cellControllers, toSection: section)
         }
         
-        if #available(iOS 15, *) {
-            dataSource.applySnapshotUsingReloadData(snapshot)
-        } else {
-            dataSource.apply(snapshot)
-        }
+        dataSource.apply(snapshot)
     }
     
     public func display(_ viewModel: ResourceErrorViewModel) {

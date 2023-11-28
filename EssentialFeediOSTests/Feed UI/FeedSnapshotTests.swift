@@ -43,6 +43,28 @@ final class FeedSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark, contentSize: .extraExtraExtraLarge)), named: "FEED_WITH_FAILED_IMAGE_LOADING_dark_extraExtraExtraLarge")
     }
     
+    func test_feedWithLoadMoreIndicator() {
+        let sut = makeSUT()
+        
+        sut.display(feedWithLoadMoreIndicator())
+        
+        assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "FEED_WITH_LOAD_MORE_INDICATOR_light")
+        assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "FEED_WITH_LOAD_MORE_INDICATOR_dark")
+    }
+    
+    func test_feedWithLoadMoreError() {
+        let sut = makeSUT()
+        
+        sut.display(feedWithLoadMoreError())
+        
+        record(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "FEED_WITH_LOAD_MORE_ERROR_light")
+        record(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "FEED_WITH_LOAD_MORE_ERROR_dark")
+        
+        record(snapshot: sut.snapshot(for: .iPhone8(style: .light, contentSize: .extraExtraExtraLarge)), named: "FEED_WITH_LOAD_MORE_ERROR_light_extraExtraExtraLarge")
+        record(snapshot: sut.snapshot(for: .iPhone8(style: .dark, contentSize: .extraExtraExtraLarge)), named: "FEED_WITH_LOAD_MORE_ERROR_dark_dark_extraExtraExtraLarge")
+
+    }
+    
     // MARK: - Helpers
     
     func makeSUT() -> ListViewController {
@@ -106,12 +128,40 @@ final class FeedSnapshotTests: XCTestCase {
             )
         ]
     }
+    
+    private func feedWithLoadMoreIndicator() -> [CellController] {
+        let stub = feedWithContent().last!
+        let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub, selection: {})
+        stub.controller = cellController
+        
+        let loadMore = LoadMoreCellController()
+        loadMore.display(ResourceLoadingViewModel(isLoading: true))
+            
+        return [
+            CellController(id: UUID(), cellController),
+            CellController(id: UUID(), loadMore),
+        ]
+    }
+    
+    private func feedWithLoadMoreError() -> [CellController] {
+        let stub = feedWithFailedImageLoading().last!
+        let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub, selection: {})
+        stub.controller = cellController
+        
+        let loadMore = LoadMoreCellController()
+        loadMore.display(ResourceErrorViewModel(message: "This is a multiline error message"))
+            
+        return [
+            CellController(id: UUID(), cellController),
+            CellController(id: UUID(), loadMore),
+        ]
+    }
 }
 
 private extension ListViewController {
     func display(_ stubs: [ImageStub]) {
         let cells: [CellController] = stubs.map { stub in
-            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
+            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub, selection: {  })
             stub.controller = cellController
             return CellController(id: UUID(), cellController)
         }
