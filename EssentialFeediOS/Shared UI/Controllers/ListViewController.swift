@@ -77,7 +77,11 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
             snapshot.appendItems(cellControllers, toSection: section)
         }
         
-        dataSource.apply(snapshot)
+        if #available(iOS 15, *) {
+            dataSource.apply(snapshot, animatingDifferences: false)
+        } else {
+            dataSource.apply(snapshot)
+        }
     }
     
     public func display(_ viewModel: ResourceErrorViewModel) {
@@ -118,4 +122,4 @@ final public class ListViewController: UITableViewController, UITableViewDataSou
         dataSource.itemIdentifier(for: indexPath)
     }
 }
-
+ 

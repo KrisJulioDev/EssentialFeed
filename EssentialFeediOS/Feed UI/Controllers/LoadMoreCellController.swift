@@ -43,7 +43,7 @@ public class LoadMoreCell: UITableViewCell {
         return label
     }()
     
-    var isLoading: Bool {
+    public var isLoading: Bool {
         get { spinner.isAnimating }
         set {
             if newValue {
@@ -63,6 +63,7 @@ public class LoadMoreCell: UITableViewCell {
 public class LoadMoreCellController: NSObject, UITableViewDataSource, UITableViewDelegate {
     private let cell = LoadMoreCell()
     private let callback: (() -> Void)
+    private var offsetObserver: NSKeyValueObservation?
     
     public init(callback: @escaping () -> Void) {
         self.callback = callback
@@ -77,7 +78,18 @@ public class LoadMoreCellController: NSObject, UITableViewDataSource, UITableVie
     }
     
     public func tableView(_ tableView: UITableView, willDisplay: UITableViewCell, forRowAt indexPath: IndexPath) {
+        reloadIfNeeded()
+        
+        offsetObserver = tableView.observe(\.contentOffset, options: .new) { [weak self] (tableView, _) in
+            guard tableView.isDragging else { return }
+            
+            self?.reloadIfNeeded()
+        }
+    }
+    
+    private func reloadIfNeeded() {
         guard !cell.isLoading else { return }
+
         callback()
     }
 }
