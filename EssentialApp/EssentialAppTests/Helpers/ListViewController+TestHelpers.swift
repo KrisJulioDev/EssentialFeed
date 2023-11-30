@@ -107,6 +107,10 @@ extension ListViewController {
         delegate?.tableView?(tableView, willDisplay: view, forRowAt: index)
     }
      
+    var loadMoreFeedErrorMessage: String? {
+        return loadMoreFeedCell()?.message
+    }
+    
     var isShowingLoadMoreFeedIndicator: Bool {
         return loadMoreFeedCell()?.isLoading == true
     }
