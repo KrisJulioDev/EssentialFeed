@@ -6,7 +6,7 @@
 //
 
 import Foundation
- 
+
 public final class ImageCommentsMapper {
     private struct Root: Decodable {
         private let items: [Item]

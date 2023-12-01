@@ -7,7 +7,7 @@
 
 import Foundation
 import EssentialFeed
-
+ 
 class HTTPClientStub: HTTPClient {
 	private class Task: HTTPClientTask {
 		func cancel() {}
@@ -20,7 +20,7 @@ class HTTPClientStub: HTTPClient {
 	}
 
 	func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-		completion(stub(url))
+		completion(stub(url)) 
 		return Task()
 	}
 }

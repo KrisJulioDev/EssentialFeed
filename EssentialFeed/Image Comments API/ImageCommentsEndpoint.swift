@@ -8,12 +8,12 @@
 import Foundation
 
 public enum ImageCommentsEndpoint {
-    case get(String)
+    case get(UUID)
     
-    public func with(_ url: URL) -> URL {
+    public func url(baseURL: URL) -> URL {
         switch self {
-        case let .get(feedImageID):
-            URL(string: "\(url.absoluteString)/v1/image/\(feedImageID)/comments")!
+        case let .get(id):
+            return baseURL.appendingPathComponent("/v1/image/\(id)/comments")
         }
     }
 }

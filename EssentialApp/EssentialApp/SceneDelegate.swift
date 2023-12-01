@@ -37,8 +37,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         rootViewController: FeedUIComposer.feedComposeWith(
             feedLoader: makeRemoteFeedLoaderWithLocalFallback,
             imageLoader: makeLocalImageLoaderWithRemoteFallback,
-            selection: showComments(for:)
-        ))
+            selection: showComments)
+        )
 
     convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
@@ -59,7 +59,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func showComments(for image: FeedImage) {
-        let url = ImageCommentsEndpoint.get(image.id.uuidString).with(baseURL)
+        let url = ImageCommentsEndpoint.get(image.id).url(baseURL: baseURL)
         let comments = CommentsUIComposer.commentsComposeWith(commentsLoader: makeRemoteCommentsLoader(url: url))
         navigationController.pushViewController(comments, animated: true)
     }
@@ -70,12 +70,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 .getPublisher(url: url)
                 .tryMap(ImageCommentsMapper.map)
                 .eraseToAnyPublisher()
-        }
+        } 
     }
     
     func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<Paginated<FeedImage>, Error> {
-        let url = baseURL.appendingPathComponent("/essential_app_feed.json")
-
+        let url = FeedEndpoint.get().url(baseURL: baseURL)
+        
         return httpClient
             .getPublisher(url: url)
             .tryMap(FeedItemsMapper.map)

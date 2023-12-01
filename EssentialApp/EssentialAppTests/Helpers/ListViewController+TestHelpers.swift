@@ -86,7 +86,7 @@ extension ListViewController {
     func numberOfRows(in section: Int) -> Int {
         tableView.numberOfSections > section ? tableView.numberOfRows(inSection: section) : 0
     }
-    
+     
     func cell(row: Int, section: Int) -> UITableViewCell? {
         guard numberOfRows(in: section) > row else { return nil }
         
@@ -121,6 +121,10 @@ extension ListViewController {
         return loadMoreFeedCell()?.isLoading == true
     }
     
+    var canLoadMoreFeed: Bool {
+        loadMoreFeedCell() != nil
+    }
+    
     func renderedFeedImageData(at index: Int) -> Data? {
         return simulateFeedImageViewVisible(at: index)?.renderedImage
     }
@@ -144,7 +148,7 @@ extension ListViewController {
 
 extension ListViewController {
     func numberOfRenderedComments() -> Int {
-        tableView.numberOfSections == 0 ? 0 : tableView.numberOfRows(inSection: commentsSection)
+        numberOfRows(in: commentsSection)
     }
     
     private var commentsSection: Int { 0 }
