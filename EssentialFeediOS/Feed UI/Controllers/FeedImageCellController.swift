@@ -38,6 +38,8 @@ public final class FeedImageCellController: NSObject, UITableViewDataSource, UIT
         cell?.locationContainer.isHidden = !viewModel.hasLocation
         cell?.locationLabel.text = viewModel.location
         cell?.descriptionLabel.text = viewModel.description
+        cell?.feedImageContainer.isShimmering = true
+        cell?.feedImageRetryButton.isHidden = true
         cell?.onRetry = { [weak self] in
             self?.delegate.didRequestImage()
         }
