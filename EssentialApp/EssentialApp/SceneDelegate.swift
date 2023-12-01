@@ -23,10 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }()
     
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(
-            storeURL: NSPersistentContainer
-                .defaultDirectoryURL()
-                .appendingPathComponent("feed-store.sqlite"))
+        do {
+            return try CoreDataFeedStore(
+                storeURL: NSPersistentContainer
+                    .defaultDirectoryURL()
+                    .appendingPathComponent("feed-store.sqlite"))
+        } catch {
+            return NullStore()
+        }
     }()
 
     private lazy var localFeedLoader: LocalFeedLoader = {
@@ -74,8 +78,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<Paginated<FeedImage>, Error> {
-        let url = FeedEndpoint.get().url(baseURL: baseURL)
-        
         return makeRemoteFeedLoader()
             .caching(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
