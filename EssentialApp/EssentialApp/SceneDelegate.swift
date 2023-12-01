@@ -89,10 +89,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .map { (cachedItems, newItems) in
                 (cachedItems + newItems, newItems.last)
             }.map(makePage)
-            .delay(for: 2, scheduler: DispatchQueue.main)
-            .flatMap { _ in
-                Fail(error: NSError(domain: "", code: 200))
-            }
             .caching(to: localFeedLoader)
     }
      

@@ -21,8 +21,7 @@ extension LocalFeedLoader: FeedCache {
 
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
         store.deleteCachedFeed { [weak self] deletionResult in
-            guard let self = self else { return }
-            
+            guard let self = self else { return } 
             switch deletionResult {
             case .success:
                 self.cache(feed, with: completion)
@@ -36,7 +35,6 @@ extension LocalFeedLoader: FeedCache {
     private func cache(_ feed: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
         store.insert(feed.toLocal(), timestamp: currentDate()) { [weak self] insertionResult in
             guard self != nil else { return }
-            
             completion(insertionResult)
         }
     }
