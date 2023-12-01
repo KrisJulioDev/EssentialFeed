@@ -15,15 +15,25 @@ final class FeedAcceptanceTests: XCTestCase {
         let feed = launch(httpClient: .online(response), store: .empty)
         
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 2)
-        XCTAssertEqual(feed.renderedFeedImageData(at: 0)?.count ?? 0, makeImageData0().count)
+        XCTAssertEqual(feed.renderedFeedImageData(at: 0)?.count, makeImageData0().count)
+        XCTAssertEqual(feed.renderedFeedImageData(at: 1)?.count, makeImageData1().count)
         XCTAssertTrue(feed.canLoadMoreFeed)
         
         feed.simulateLoadMoreFeedAction()
+        
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 3)
         XCTAssertEqual(feed.renderedFeedImageData(at: 0)?.count, makeImageData0().count)
         XCTAssertEqual(feed.renderedFeedImageData(at: 1)?.count, makeImageData1().count)
         XCTAssertEqual(feed.renderedFeedImageData(at: 2)?.count, makeImageData2().count)
         XCTAssertTrue(feed.canLoadMoreFeed)
+        
+        feed.simulateLoadMoreFeedAction()
+        
+        XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 3)
+        XCTAssertEqual(feed.renderedFeedImageData(at: 0)?.count, makeImageData0().count)
+        XCTAssertEqual(feed.renderedFeedImageData(at: 1)?.count, makeImageData1().count)
+        XCTAssertEqual(feed.renderedFeedImageData(at: 2)?.count, makeImageData2().count)
+        XCTAssertFalse(feed.canLoadMoreFeed)
     }
     
     func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
