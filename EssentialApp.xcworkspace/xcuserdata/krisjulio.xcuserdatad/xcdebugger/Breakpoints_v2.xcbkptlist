@@ -20,53 +20,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2BC7EA57-09A6-4E56-8FB0-939FF673AC8F"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "EssentialFeed/Image Comments Presentation/ImageCommentsPresenter.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "map(_:currentDate:calendar:locale:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "2BC7EA57-09A6-4E56-8FB0-939FF673AC8F - 3366b68bfb34028d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static EssentialFeed.ImageCommentsPresenter.map(_: Swift.Array&lt;EssentialFeed.ImageComment&gt;, currentDate: Foundation.Date, calendar: Foundation.Calendar, locale: Foundation.Locale) -&gt; EssentialFeed.ImageCommentsViewModel"
-                  moduleName = "EssentialFeed"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krisjulio/Programming/EssentialFeed/EssentialFeed/Image%20Comments%20Presentation/ImageCommentsPresenter.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "552">
-               </Location>
-               <Location
-                  uuid = "2BC7EA57-09A6-4E56-8FB0-939FF673AC8F - 78d6b8552ab40a7f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (EssentialFeed.ImageComment) -&gt; EssentialFeed.ImageCommentViewModel in static EssentialFeed.ImageCommentsPresenter.map(_: Swift.Array&lt;EssentialFeed.ImageComment&gt;, currentDate: Foundation.Date, calendar: Foundation.Calendar, locale: Foundation.Locale) -&gt; EssentialFeed.ImageCommentsViewModel"
-                  moduleName = "EssentialFeed"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krisjulio/Programming/EssentialFeed/EssentialFeed/Image%20Comments%20Presentation/ImageCommentsPresenter.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27"
-                  offsetFromSymbolStart = "148">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
