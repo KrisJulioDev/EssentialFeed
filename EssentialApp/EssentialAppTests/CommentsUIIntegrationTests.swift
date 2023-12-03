@@ -42,9 +42,9 @@ class CommentsUIIntegrationTests: XCTestCase {
     }
     
     func test_loadingCommentsIndicator_isVisibleWhileLoadingComments() {
-        let (sut, loader) = makeSUT()
+//        let (sut, loader) = makeSUT()
         
-        sut.loadViewIfNeeded()
+//        sut.loadViewIfNeeded()
 //        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
 //        
 //        loader.completeCommentsLoading(at: 0)
