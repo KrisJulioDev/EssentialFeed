@@ -14,12 +14,18 @@ import EssentialFeediOS
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
+    private lazy var scheduler: AnyDispatchQueueScheduler = DispatchQueue(
+        label: "com.essentialdeveloper.infra.queue",
+        qos: .userInitiated,
+        attributes: .concurrent
+    ).eraseToAnyScheduler()
+
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
     
     private lazy var baseURL: URL = {
-       URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
+        URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
     }()
     
     private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialAppCaseStudy", category: "main")
@@ -36,22 +42,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return NullStore()
         }
     }()
-
+    
     private lazy var localFeedLoader: LocalFeedLoader = {
         LocalFeedLoader(store: store, currentDate: Date.init)
     }()
-
+    
     private lazy var navigationController: UINavigationController = UINavigationController(
         rootViewController: FeedUIComposer.feedComposeWith(
             feedLoader: makeRemoteFeedLoaderWithLocalFallback,
             imageLoader: makeLocalImageLoaderWithRemoteFallback,
             selection: showComments)
-        )
-
-    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
+    )
+    
+    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore, scheduler: AnyDispatchQueueScheduler) {
         self.init()
         self.httpClient = httpClient
         self.store = store
+        self.scheduler = scheduler
     }
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -78,7 +85,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 .getPublisher(url: url)
                 .tryMap(ImageCommentsMapper.map)
                 .eraseToAnyPublisher()
-        } 
+        }
     }
     
     func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<Paginated<FeedImage>, Error> {
@@ -97,19 +104,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }.map(makePage)
             .caching(to: localFeedLoader)
     }
-     
+    
     private func makeRemoteFeedLoader(after last: FeedImage? = nil) -> AnyPublisher<[FeedImage], Error> {
         let url = FeedEndpoint.get(after: last).url(baseURL: baseURL)
         return httpClient
-                .getPublisher(url: url)
-                .tryMap(FeedItemsMapper.map)
-                .eraseToAnyPublisher()
+            .getPublisher(url: url)
+            .tryMap(FeedItemsMapper.map)
+            .eraseToAnyPublisher()
     }
     
     private func makeFirstPage(items: [FeedImage]) -> Paginated<FeedImage> {
         makePage(items: items, last: items.last)
     }
-      
+    
     private func makePage(items: [FeedImage], last: FeedImage?) -> Paginated<FeedImage> {
         Paginated(items: items, loadMorePublisher: last.map { last in
             { self.makeRemoteLoadMoreLoader(last: last) }
@@ -134,25 +141,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        localFeedLoader.validateCache { _ in }
+        do {
+            try localFeedLoader.validateCache()
+        } catch {
+            logger.error("Failed to validate cache with error: \(error.localizedDescription)")
+        }
     }
     
-    func makeLocalImageLoaderWithRemoteFallback(_ url: URL) -> FeedImageDataLoader.Publisher {
+    private func makeLocalImageLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
         let localImageLoader = LocalFeedImageDataLoader(store: store)
-        let remoteImageLoader = RemoteFeedImageDataLoader(client: httpClient)
-
+        
         return localImageLoader
             .loadImageDataPublisher(from: url)
-            .fallback(to: {
-                remoteImageLoader
-                    .loadImageDataPublisher(from: url)
+            .fallback(to: { [httpClient, scheduler] in
+                httpClient
+                    .getPublisher(url: url)
+                    .tryMap(FeedImageDataMapper.map)
                     .caching(to: localImageLoader, using: url)
+                    .subscribe(on: scheduler)
+                    .eraseToAnyPublisher()
             })
-    }
-}
-
-extension FeedImageDataCache {
-    func saveIgnoringResult(_ data: Data, for url: URL) {
-        save(data, for: url, completion: { _ in })
+            .subscribe(on: scheduler)
+            .eraseToAnyPublisher()
     }
 }

@@ -6,67 +6,44 @@
 //
 
 import Foundation
- import Combine
-
 
 public final class LocalFeedImageDataLoader {
-    let store: FeedImageDataStore
+    private let store: FeedImageDataStore
     
     public init(store: FeedImageDataStore) {
         self.store = store
     }
 }
- 
-extension LocalFeedImageDataLoader: FeedImageDataCache {
-    public typealias SaveResult = FeedImageDataCache.Result
 
+extension LocalFeedImageDataLoader: FeedImageDataCache {
     public enum SaveError: Error {
         case failed
     }
-
-    public func save(_ data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        completion(SaveResult {
+    
+    public func save(_ data: Data, for url: URL) throws {
+        do {
             try store.insert(data, for: url)
-        }.mapError { _ in SaveError.failed })
+        } catch {
+            throw SaveError.failed
+        }
     }
 }
 
 extension LocalFeedImageDataLoader: FeedImageDataLoader {
-    
     public enum LoadError: Error {
         case failed
         case notFound
     }
     
-    private class LoadImageDataTask: FeedImageDataLoaderTask {
-        private var completion: ((FeedImageDataLoader.Result) -> Void)?
-        
-        init(completion: @escaping (FeedImageDataLoader.Result) -> Void) {
-            self.completion = completion
+    public func loadImageData(from url: URL) throws -> Data {
+        do {
+            if let imageData = try store.retrieve(dataForURL: url) {
+                return imageData
+            }
+        } catch {
+            throw LoadError.failed
         }
         
-        func complete(with result: FeedImageDataLoader.Result) {
-            completion?(result)
-        }
-        
-        func cancel() {
-            preventFurtherCompletion()
-        }
-            
-        func preventFurtherCompletion() {
-            completion = nil
-        }
-    }
-    
-    public func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-         
-        let task = LoadImageDataTask(completion: completion)
-        task.complete(with: Swift.Result { try store.retrieve(dataForURL: url) }
-                .mapError { _ in LoadError.failed }
-                .flatMap { data in
-                    data.map { .success($0) } ?? .failure(LoadError.notFound)
-                })
-        
-        return task
+        throw LoadError.notFound
     }
 }
