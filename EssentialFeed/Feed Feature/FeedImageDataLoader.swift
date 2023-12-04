@@ -7,6 +7,10 @@
 
 import Foundation
 
-public protocol FeedImageDataLoader { 
+public protocol FeedImageDataLoaderTask {
+    func cancel()
+}
+
+public protocol FeedImageDataLoader {
     func loadImageData(from url: URL) throws -> Data
 }

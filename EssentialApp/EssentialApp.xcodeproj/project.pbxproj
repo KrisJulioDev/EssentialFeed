@@ -174,17 +174,6 @@
 			path = EssentialAppUIAcceptanceTests;
 			sourceTree = "<group>";
 		};
-		359A5EFA2B04E9FF0052ED0C /* Composition */ = {
-			isa = PBXGroup;
-			children = (
-				35C783882B09DBF500D3FF44 /* CombineHelpers.swift */,
-				35CCF3D82B0724BE001853E7 /* WeakRefVirtualProxy.swift */,
-				35CCF3D62B0724BE001853E7 /* FeedViewAdapter.swift */,
-				35CCF3D42B07247E001853E7 /* LoadResourcePresentationAdapter.swift */,
-			);
-			path = Composition;
-			sourceTree = "<group>";
-		};
 		35B3F18E2B04897D00EE2BC0 = {
 			isa = PBXGroup;
 			children = (
@@ -210,12 +199,15 @@
 			isa = PBXGroup;
 			children = (
 				3530D3F02B0C46370075C716 /* Helpers */,
-				359A5EFA2B04E9FF0052ED0C /* Composition */,
 				35B3F19A2B04897D00EE2BC0 /* AppDelegate.swift */,
 				35B3F19C2B04897D00EE2BC0 /* SceneDelegate.swift */,
-				35CCF3D22B07246A001853E7 /* FeedUIComposer.swift */,
-				354E94D82B117DE300947554 /* CommentsUIComposer.swift */,
 				35A29B0D2B1A09B300DB1A05 /* NullStore.swift */,
+				35C783882B09DBF500D3FF44 /* CombineHelpers.swift */,
+				35CCF3D22B07246A001853E7 /* FeedUIComposer.swift */,
+				35CCF3D82B0724BE001853E7 /* WeakRefVirtualProxy.swift */,
+				35CCF3D42B07247E001853E7 /* LoadResourcePresentationAdapter.swift */,
+				354E94D82B117DE300947554 /* CommentsUIComposer.swift */,
+				35CCF3D62B0724BE001853E7 /* FeedViewAdapter.swift */,
 				35B3F1A32B04897E00EE2BC0 /* Assets.xcassets */,
 				35B3F1A52B04897E00EE2BC0 /* LaunchScreen.storyboard */,
 				35B3F1A82B04897E00EE2BC0 /* Info.plist */,
